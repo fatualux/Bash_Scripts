@@ -1,87 +1,87 @@
 [
   {
     "name": "Alarm",
-    "path": "Apps/alarm",
+    "path": "alarm",
     "command": "sh"
   },
   {
     "name": "Converter",
-    "path": "Apps/converter",
+    "path": "converter",
     "command": "sh"
   },
   {
     "name": "Downloader",
-    "path": "Apps/downloader",
+    "path": "downloader",
     "command": "sh"
   },
   {
     "name": "Batch renamer",
-    "path": "Apps/batch_renamer",
+    "path": "batch_renamer",
     "command": "sh"
   },
   {
     "name": "Remove Duplicates",
-    "path": "Apps/rm_dups",
+    "path": "rm_dups",
     "command": "sh"
   },
   {
     "name": "GIT Helper",
-    "path": "Apps/git_helper",
+    "path": "git_helper",
     "command": "sh"
   },
   {
     "name": "7Zip GUI",
-    "path": "Apps/7zip_GUI",
+    "path": "7zip_GUI",
     "command": "sh"
   },
   {
     "name": "Virtual Env Activate",
-    "path": "Apps/vactivate",
+    "path": "vactivate",
     "command": "sh"
   },
   {
     "name": "Polymath",
-    "path": "Apps/polymath",
+    "path": "polymath",
     "command": "sh"
   },
   {
     "name": "Whisper",
-    "path": "Apps/whisper",
+    "path": "whisper",
     "command": "sh"
   },
   {
     "name": "Realtime Transcription",
-    "path": "Apps/realtime_whisper",
+    "path": "realtime_whisper",
     "command": "sh"
   },
   {
     "name": "Tesseract OCR",
-    "path": "Apps/tesseract",
+    "path": "tesseract",
     "command": "sh"
   },
   {
     "name": "Translator",
-    "path": "Apps/argos",
+    "path": "argos",
     "command": "sh"
   },
   {
     "name": "TTS",
-    "path": "Apps/tts",
+    "path": "tts",
     "command": "sh"
   },
   {
     "name": "ComfyUI",
-    "path": "Apps/comfyUI",
+    "path": "comfyUI",
     "command": "alacritty exec sh"
   },
   {
     "name": "Riffusion",
-    "path": "Apps/riffusion",
+    "path": "riffusion",
     "command": "sh"
   },
   {
     "name": "Background remover",
-    "path": "Apps/bg_remover",
+    "path": "bg_remover",
     "command": "sh"
   }
 ]
