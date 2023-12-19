@@ -1,0 +1,87 @@
+[
+  {
+    "name": "Alarm",
+    "path": "Apps/alarm",
+    "command": "sh"
+  },
+  {
+    "name": "Converter",
+    "path": "Apps/converter",
+    "command": "sh"
+  },
+  {
+    "name": "Downloader",
+    "path": "Apps/downloader",
+    "command": "sh"
+  },
+  {
+    "name": "Batch renamer",
+    "path": "Apps/batch_renamer",
+    "command": "sh"
+  },
+  {
+    "name": "Remove Duplicates",
+    "path": "Apps/rm_dups",
+    "command": "sh"
+  },
+  {
+    "name": "GIT Helper",
+    "path": "Apps/git_helper",
+    "command": "sh"
+  },
+  {
+    "name": "7Zip GUI",
+    "path": "Apps/7zip_GUI",
+    "command": "sh"
+  },
+  {
+    "name": "Virtual Env Activate",
+    "path": "Apps/vactivate",
+    "command": "sh"
+  },
+  {
+    "name": "Polymath",
+    "path": "Apps/polymath",
+    "command": "sh"
+  },
+  {
+    "name": "Whisper",
+    "path": "Apps/whisper",
+    "command": "sh"
+  },
+  {
+    "name": "Realtime Transcription",
+    "path": "Apps/realtime_whisper",
+    "command": "sh"
+  },
+  {
+    "name": "Tesseract OCR",
+    "path": "Apps/tesseract",
+    "command": "sh"
+  },
+  {
+    "name": "Translator",
+    "path": "Apps/argos",
+    "command": "sh"
+  },
+  {
+    "name": "TTS",
+    "path": "Apps/tts",
+    "command": "sh"
+  },
+  {
+    "name": "ComfyUI",
+    "path": "Apps/comfyUI",
+    "command": "alacritty exec sh"
+  },
+  {
+    "name": "Riffusion",
+    "path": "Apps/riffusion",
+    "command": "sh"
+  },
+  {
+    "name": "Background remover",
+    "path": "Apps/bg_remover",
+    "command": "sh"
+  }
+]

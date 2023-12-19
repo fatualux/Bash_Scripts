@@ -1,0 +1,7 @@
+# ignore .txt files
+*.txt
+
+# ignore log files
+*.log
+
+openssl.sh
