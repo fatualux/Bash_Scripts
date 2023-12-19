@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# Dependencies:
+# - jq: JSON processor (https://stedolan.github.io/jq/)
+# - yad: Yet Another Dialog (https://github.com/v1cont/yad)
+# - fzf: Fuzzy finder (https://github.com/junegunn/fzf)
+
+# Function to check if dependencies are installed
+check_dependencies() {
+    local dependencies=("jq" "yad" "fzf")
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" > /dev/null; then
+            echo "Error: $dep is not installed. Please install it before running this script."
+            exit 1
+        fi
+    done
+}
+
+# Check if dependencies are installed
+check_dependencies
+
+# Get the directory of the script
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Read apps.json using jq
+apps=$(jq -c '.' "$DIR/apps.json")
+
+# Function to launch an app
+launch_app() {
+    app=$1
+    path=$(jq -r '.path' <<< "$app")
+    command=$(jq -r '.command' <<< "$app")
+    full_path="$DIR/$path"
+
+    if [ -z "$path" ]; then
+        echo "Error: Path not found in app definition - $app"
+        return
+    fi
+
+    if [ -z "$command" ]; then
+        echo "Error: Command not found in app definition - $app"
+        return
+    fi
+
+    execute_command "$command" "$full_path"
+}
+
+# Function to execute the command
+execute_command() {
+    command=$1
+    full_path=$2
+
+    if [ "$path" == "comfyUI" ]; then
+        $command alacritty exec sh "$full_path" &
+    elif [ -d "$full_path" ] && [ ! -z "$(ls -A "$full_path")" ]; then
+        $command "$full_path" &
+    elif [ -f "$full_path" ]; then
+        $command "$full_path" &
+    else
+        echo "Error: Invalid path or directory is empty - $full_path"
+    fi
+}
+
+# Function to search and display apps using yad
+search_apps() {
+    search_text=$(yad --entry --title="Search" --text="Enter search text:")
+
+    if [ -n "$search_text" ]; then
+        filtered_apps=$(jq -c '.[] | select(.name | ascii_downcase | contains($search_text))' --arg search_text "$search_text" <<< "$apps")
+
+        if [ -z "$filtered_apps" ]; then
+            # No results, user pressed cancel
+            yad --info --title="Information" --text="Operation canceled."
+            exit
+        fi
+
+        selected_app=$(jq -r '.name' <<< "$filtered_apps" | yad --list --column="Apps" --title="Search Results" --text="Select an app:" --width=400 --height=400)
+
+        if [ -n "$selected_app" ]; then
+            app=$(jq -c --arg selected_app "$selected_app" '.[] | select(.name == $selected_app)' <<< "$apps")
+            launch_app "$app" &
+        fi
+    else
+        # User pressed cancel in the search dialog, perform incremental search with fzf
+        choice=$(jq -r '.[] | .name' <<< "$apps" | fzf --header="App Drawer" --query="$search_text" --select-1 --exit-0)
+
+        if [ -n "$choice" ]; then
+            app=$(jq -c --arg choice "$choice" '.[] | select(.name == $choice)' <<< "$apps")
+            launch_app "$app" &
+        else
+            yad --info --title="Information" --text="Operation canceled."
+            exit
+        fi
+    fi
+}
+
+# Main loop for the UI
+while true; do
+    choice=$(jq -r '.[] | .name' <<< "$apps" | yad --list --column="Apps" --title="App Drawer" --text="Select an app:" --width=400 --height=400)
+
+    if [ -n "$choice" ]; then
+        app=$(jq -c --arg choice "$choice" '.[] | select(.name == $choice)' <<< "$apps")
+        launch_app "$app" &
+    else
+        search_apps
+    fi
+done
