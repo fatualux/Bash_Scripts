@@ -2,12 +2,11 @@
 
 # Dependencies:
 # - jq: JSON processor (https://stedolan.github.io/jq/)
-# - yad: Yet Another Dialog (https://github.com/v1cont/yad)
 # - fzf: Fuzzy finder (https://github.com/junegunn/fzf)
 
 # Function to check if dependencies are installed
 check_dependencies() {
-    local dependencies=("jq" "yad" "fzf")
+    local dependencies=("jq" "fzf")
     for dep in "${dependencies[@]}"; do
         if ! command -v "$dep" > /dev/null; then
             echo "Error: $dep is not installed. Please install it before running this script."
@@ -61,47 +60,15 @@ execute_command() {
     fi
 }
 
-# Function to search and display apps using yad
-search_apps() {
-    search_text=$(yad --entry --title="Search" --text="Enter search text:")
-
-    if [ -n "$search_text" ]; then
-        filtered_apps=$(jq -c '.[] | select(.name | ascii_downcase | contains($search_text))' --arg search_text "$search_text" <<< "$apps")
-
-        if [ -z "$filtered_apps" ]; then
-            # No results, user pressed cancel
-            yad --info --title="Information" --text="Operation canceled."
-            exit
-        fi
-
-        selected_app=$(jq -r '.name' <<< "$filtered_apps" | yad --list --column="Apps" --title="Search Results" --text="Select an app:" --width=400 --height=400)
-
-        if [ -n "$selected_app" ]; then
-            app=$(jq -c --arg selected_app "$selected_app" '.[] | select(.name == $selected_app)' <<< "$apps")
-            launch_app "$app" &
-        fi
-    else
-        # User pressed cancel in the search dialog, perform incremental search with fzf
-        choice=$(jq -r '.[] | .name' <<< "$apps" | fzf --header="App Drawer" --query="$search_text" --select-1 --exit-0)
-
-        if [ -n "$choice" ]; then
-            app=$(jq -c --arg choice "$choice" '.[] | select(.name == $choice)' <<< "$apps")
-            launch_app "$app" &
-        else
-            yad --info --title="Information" --text="Operation canceled."
-            exit
-        fi
-    fi
-}
-
-# Main loop for the UI
+# Main loop using fzf for app selection
 while true; do
-    choice=$(jq -r '.[] | .name' <<< "$apps" | yad --list --column="Apps" --title="App Drawer" --text="Select an app:" --width=400 --height=400)
+    choice=$(jq -r '.[] | .name' <<< "$apps" | fzf --header="App Drawer" --select-1 --exit-0)
 
     if [ -n "$choice" ]; then
         app=$(jq -c --arg choice "$choice" '.[] | select(.name == $choice)' <<< "$apps")
         launch_app "$app" &
     else
-        search_apps
+        echo "Operation canceled."
+        exit
     fi
 done
