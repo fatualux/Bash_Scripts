@@ -5,7 +5,7 @@
 
 **Here is a short demostration of some of them:**
 
-###Version 1
+### Version 1
 #### [Youtube Demo](https://www.youtube.com/watch?v=aAU71nJ2XCA)
 
 # WIKI
