@@ -1,4 +1,4 @@
-# My Scripts
+# Bash Scripts
 
 ### A small collection of bash scripts to speed up everyday tasks
 ##### Here are some scripts I often use (I assigned them shortcuts in my i3wm and Sway configs to speed up execution).
@@ -8,4 +8,4 @@
 
 # WIKI
 
-## [LAUNCHER.SH](./doc/launcher.md
+## [LAUNCHER.SH](./doc/launcher.md)
