@@ -4,6 +4,8 @@
 ##### Here are some scripts I often use (I assigned them shortcuts in my i3wm and Sway configs to speed up execution).
 
 **Here is a short demostration of some of them:**
+
+###Version 1
 #### [Youtube Demo](https://www.youtube.com/watch?v=aAU71nJ2XCA)
 
 # WIKI
