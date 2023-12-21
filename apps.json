@@ -1,87 +1,93 @@
 [
   {
     "name": "Alarm",
-    "path": "alarm",
+    "path": "alarm.sh",
     "command": "sh"
   },
   {
     "name": "Converter",
-    "path": "converter",
+    "path": "converter.sh",
     "command": "sh"
   },
   {
     "name": "Downloader",
-    "path": "downloader",
+    "path": "downloader.sh",
     "command": "sh"
   },
   {
     "name": "Batch renamer",
-    "path": "batch_renamer",
+    "path": "batch_renamer.sh",
     "command": "sh"
   },
   {
     "name": "Remove Duplicates",
-    "path": "rm_dups",
+    "path": "rm_dups.sh",
     "command": "sh"
   },
   {
     "name": "GIT Helper",
-    "path": "git_helper",
+    "path": "git_helper.sh",
     "command": "sh"
   },
   {
     "name": "7Zip GUI",
-    "path": "7zip_GUI",
+    "path": "7zip_GUI.sh",
     "command": "sh"
   },
   {
     "name": "Virtual Env Activate",
-    "path": "vactivate",
+    "path": "vactivate.sh",
     "command": "sh"
   },
   {
     "name": "Polymath",
-    "path": "polymath",
+    "path": "polymath.sh",
     "command": "sh"
   },
   {
     "name": "Whisper",
-    "path": "whisper",
+    "path": "whisper.sh",
     "command": "sh"
   },
   {
     "name": "Realtime Transcription",
-    "path": "realtime_whisper",
+    "path": "realtime_whisper.sh",
     "command": "sh"
   },
   {
     "name": "Tesseract OCR",
-    "path": "tesseract",
+    "path": "tesseract.sh",
     "command": "sh"
   },
   {
     "name": "Translator",
-    "path": "argos",
+    "path": "argos.sh",
     "command": "sh"
   },
   {
     "name": "TTS",
-    "path": "tts",
+    "path": "tts.sh",
     "command": "sh"
   },
   {
     "name": "ComfyUI",
-    "path": "comfyUI",
+    "path": "comfyUI.sh",
     "command": "alacritty exec sh"
   },
   {
     "name": "Riffusion",
-    "path": "riffusion",
+    "path": "riffusion.sh",
     "command": "sh"
   },
   {
     "name": "Background remover",
-    "path": "bg_remover",
+    "path": "bg_remover.sh",
+    "command": "sh"
+  },
+  {
+    "name": "Prompt Generator",
+    "path": "prompt_generator.sh",
     "command": "sh"
   }
+
 ]
