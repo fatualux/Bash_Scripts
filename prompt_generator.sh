@@ -36,69 +36,47 @@ input_action() {
     export ACTION=$action
 }
 
-# Use yad to get the type of image from the .json file
-choose_image() {
-    image_list=$(jq -r '.[] | select(.name == "Image") | .choice' "$DIR/prompt.json")
+# Function to prompt the user to select multiple choices
+select_multiple_choices() {
+    local prompt="$1"
+    local choices_list="$2"
 
-    # Use yad to display the list of images vertically
-    option=$(echo "$image_list" | tr ',' '\n' | yad --list --column="Image" --separator='' --height=300 --width=300)
+    # Use yad to display the list of choices
+    options=$(echo "$choices_list" | tr ',' '\n' | yad --list --column="$prompt" --separator='' --height=300 --width=300 --multiple)
 
-    # Check if a valid option was selected
-    if [ -n "$option" ]; then
-        echo "Selected image option: $option"
-        export IMAGE=$option
+    # Check if at least one option was selected
+    if [ -n "$options" ]; then
+        # Add a comma and a space after every option
+        formatted_options=$(echo "$options" | sed 's/$/, /' | tr -d '\n')
+        formatted_options="${formatted_options%, }"  # Remove the trailing comma and space
+        echo "Selected $prompt options: $formatted_options"
+        export "${prompt^^}"="$formatted_options"  # Convert prompt to uppercase and export the variable
     else
-        echo "No option selected. Exiting..."
+        echo "No $prompt options selected. Exiting..."
         exit 1
     fi
+}
+
+# Updated functions to use select_multiple_choices
+
+choose_image() {
+    image_list=$(jq -r '.[] | select(.name == "Image") | .choice' "$DIR/prompt.json")
+    select_multiple_choices "image" "$image_list"
 }
 
 choose_style() {
     style_list=$(jq -r '.[] | select(.name == "Style") | .choice' "$DIR/prompt.json")
-    option=$(echo "$style_list" | tr ',' '\n' | yad --list --column="Style" --separator='' --height=300 --width=300)
-
-    if [ -n "$option" ]; then
-        echo "Selected style option: $option"
-        export STYLE="$option style"
-    else
-        echo "No option selected. Exiting..."
-        exit 1
-    fi
+    select_multiple_choices "style" "$style_list"
 }
 
 choose_light() {
     light_list=$(jq -r '.[] | select(.name == "Light") | .choice' "$DIR/prompt.json")
-    option=$(echo "$light_list" | tr ',' '\n' | yad --list --column="Light" --separator='' --height=300 --width=300)
-
-    if [ -n "$option" ]; then
-        echo "Selected light option: $option"
-        export LIGHT=$option
-    else
-        echo "No option selected. Exiting..."
-        exit 1
-    fi
+    select_multiple_choices "light" "$light_list"
 }
 
 add_custom() {
     custom_list=$(jq -r '.[] | select(.name == "Custom") | .choice' "$DIR/prompt.json")
-    options=$(echo "$custom_list" | tr ',' '\n' | yad --list --column="Custom" --separator='' --height=300 --width=300)
-
-    # Check if at least one option was selected
-    if [ -n "$options" ]; then
-        echo "Selected custom options: $options"
-
-        # Store the selected options in an array
-        IFS=$'\n' read -r -a custom_array <<< "$options"
-
-        # Join the array elements into a string
-        CUSTOM=$(IFS=, ; echo "${custom_array[*]}")
-
-        # Example of using the concatenated variable
-        export CUSTOM
-    else
-        echo "No options selected. Exiting..."
-        exit 1
-    fi
+    select_multiple_choices "custom" "$custom_list"
 }
 
 launch_generator() {
