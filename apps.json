@@ -87,7 +87,7 @@
   {
     "name": "Prompt Generator",
     "path": "prompt_generator.sh",
-    "command": "sh"
+    "command": "alacritty exec sh"
   }
 
 ]
