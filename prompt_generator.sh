@@ -2,7 +2,7 @@
 
 # Dependencies:
 # - jq: JSON processor (https://stedolan.github.io/jq/)
-# - yad: GUI dialog (https://github.com/kpul/wad)
+# - yad: GUI dialog (https://github.com/v1cont/yad)
 
 # Function to check if dependencies are installed
 check_dependencies() {
