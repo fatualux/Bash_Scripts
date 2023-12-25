@@ -19,7 +19,9 @@ Make sure you have the following dependencies installed before running the scrip
 - The main loop presents a selection menu using fzf, allowing you to launch your chosen app.
 
 ## Usage Example
+```
 ./launcher.sh
+```
 
 ## Note
 - If any dependencies are missing, the script will prompt you to install them before execution.
