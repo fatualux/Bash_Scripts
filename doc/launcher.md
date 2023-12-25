@@ -1,37 +1,25 @@
-# 7zip GUI Script
+# LAUNCHER.SH
 
-This Bash script provides a graphical user interface (GUI) for interacting with 7-Zip, allowing users to compress and extract files easily. The script relies on `zenity` for GUI dialogs and `7z` for compression and extraction.
+## Overview
+This Bash script is a script launcher that uses [jq](https://stedolan.github.io/jq/) for JSON processing and [fzf](https://github.com/junegunn/fzf) for fuzzy finding. It allows you to select and launch scripts defined in the `apps.json` file interactively.
 
-## Prerequisites
+## Dependencies
+Make sure you have the following dependencies installed before running the script:
+- [jq](https://stedolan.github.io/jq/): JSON processor
+- [fzf](https://github.com/junegunn/fzf): Fuzzy finder
 
-Ensure that the following dependencies are installed:
+## How to Use
+1. Clone or download the script.
+2. Ensure the dependencies are installed.
+3. Run the script in a terminal.
 
-- Bash
-- Zenity
-- 7z (7-Zip)
+## Structure
+- The script reads app configurations from the `apps.json` file.
+- Each app entry in the JSON file should have a name, path, and command.
+- The main loop presents a selection menu using fzf, allowing you to launch your chosen app.
 
-You can install the dependencies using your package manager. For example, on Debian-based systems:
+## Usage Example
+./launcher.sh
 
-```bash```
-sudo apt-get install bash zenity p7zip-full
-
-## Usage
-
-Clone the repository or download the script.
-Make the script executable:
-
-```bash```
-chmod +x 7zip-gui.sh
-
-Run the script:
-
-```bash```
-./7zip-gui.sh
-
-The script will prompt you to choose an action (Compress or Extract) and guide you through the process using Zenity dialogs.
-
-Features
-
-Compress files into a new archive or add to an existing archive.
-Choose compression methods (7z, zip, tar, tar.gz, tar.bz2) and compression levels.
-Extract files from an archive to a specified output directory.
+## Note
+- If any dependencies are missing, the script will prompt you to install them before execution.
