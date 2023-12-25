@@ -1,4 +1,17 @@
 #!/bin/bash
+# This script is based on translate-shell (https://github.com/soimort/translate-shell)
+# It depends on: bash zenity
+
+check_dependencies() {
+  dependencies=("zenity" "trans" "wl-copy")
+
+  for dep in "${dependencies[@]}"; do
+    if ! command -v "$dep" &>/dev/null; then
+      echo "Error: $dep not found. Please install it and try again."
+      exit 1
+    fi
+  done
+}
 
 ListLanguages() {
   options=("English" "Italian" "French" "Spanish" "German" "Japanese" "Russian" "Chinese")
@@ -35,6 +48,6 @@ translate_cmd() {
   exit 0
 }
 
+check_dependencies
 ListLanguages
-
 translate_cmd
