@@ -11,3 +11,5 @@
 # WIKI
 
 ## [LAUNCHER.SH](./doc/launcher.md)
+
+## [7zipGUI.SH](./doc/7zipGUI.md)
