@@ -5,11 +5,13 @@
 
 **Here is a short demostration of some of them:**
 
-### Version 1
+### OLD VERSION
 #### [Youtube Demo](https://www.youtube.com/watch?v=aAU71nJ2XCA)
 
-# WIKI
+# Documentation
 
 ## [LAUNCHER.SH](./doc/launcher.md)
 
 ## [7zipGUI.SH](./doc/7zipGUI.md)
+
+## [TRANSLATE.SH](./doc/translate.md)
