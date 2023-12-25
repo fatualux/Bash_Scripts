@@ -8,7 +8,7 @@ Make sure the following dependencies are installed:
 
 - [Zenity](https://help.gnome.org/users/zenity/stable/)
 - [trans](https://github.com/soimort/translate-shell)
-- [wl-copy](https://github.com/bugaevc/wl-clipboard)
+- [wl-clipboard](https://github.com/bugaevc/wl-clipboard)
 
 ## Usage
 
