@@ -15,3 +15,5 @@
 ## [7zipGUI.SH](./doc/7zipGUI.md)
 
 ## [TRANSLATE.SH](./doc/translate.md)
+
+## [ALARM.SH](./doc/alarm.md)
