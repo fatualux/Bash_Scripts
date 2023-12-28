@@ -17,3 +17,5 @@
 ## [TRANSLATE.SH](./doc/translate.md)
 
 ## [ALARM.SH](./doc/alarm.md)
+
+## [CONVERTER.SH](./doc/converter.md)
