@@ -72,7 +72,7 @@
   {
     "name": "ComfyUI",
     "path": "comfyUI.sh",
-    "command": "alacritty exec sh"
+    "command": "foot -e sh"
   },
   {
     "name": "Riffusion",
@@ -87,7 +87,11 @@
   {
     "name": "Prompt Generator",
     "path": "prompt_generator.sh",
-    "command": "alacritty exec sh"
+    "command": "foot -e sh"
+  },
+  {
+    "name": "Ollama-UI",
+    "path": "ollama.sh",
+    "command": "foot -e sh"
   }
-
 ]
