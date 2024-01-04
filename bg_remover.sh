@@ -1,16 +1,17 @@
-#!/bin/sh
-#This script is based on backgroundremover (https://github.com/nadermx/backgroundremover)#
+#!/bin/bash
+# This script is based on backgroundremover (https://github.com/nadermx/backgroundremover)#
 
-WORKDIR=$HOME/.virtualenv/background-remover
-source $WORKDIR/bin/activate
+WORKDIR="$HOME/.virtualenv/background-remover"
+source "$WORKDIR/bin/activate"
 
 SelectFile() {
-  files=$(zenity --title "Which media file do you want to process?"  --file-selection --multiple --filename=$HOME/)
+  files=$(zenity --title "Which media file do you want to process?" --file-selection --multiple --filename="$HOME/")
   [[ "$files" ]] || exit 1
-  echo $files | tr "|" "\n" | while read file
-  do
-    echo "$file" >> files.txt
-  done
+  FILES_LIST="files.txt"
+  if [ -f "$FILES_LIST" ]; then
+    rm "$FILES_LIST"
+  fi
+  echo "$files" | tr "|" "\n" > "$FILES_LIST"
 }
 
 RemovalType() {
@@ -25,65 +26,64 @@ RemovalType() {
     "Strong")
       export R_TYPE="u2net"
       ;;
+    *)
+      echo "Invalid option"
+      exit 1
+      ;;
   esac
 }
 
 FrameRate() {
   r_frame=$(zenity --title "Choose the frame rate you want to process:" --list --column "Frame Rate" "30" "60" "120" --hide-header --width 820 --height 460)
   case $r_frame in
-    "30")
-      export R_FRAME="30"
+    "30" | "60" | "120")
+      export R_FRAME="$r_frame"
       ;;
-    "60")
-      export R_FRAME="60"
-      ;;
-    "120")
-      export R_FRAME="120"
+    *)
+      echo "Invalid option"
+      exit 1
       ;;
   esac
 }
 
-VideoFormat() {
-  v_format=$(zenity --title "What video format do you want to process?" --list --column "Format" "MOV" "GIF" --hide-header --width 820 --height 460)
-  case $v_format in
-    "MOV")
-        IFS=$'\n'
-        for FILE in $(cat files.txt);
-        do
-          backgroundremover -i "$FILE" -m "$R_TYPE" -tv -fr "$R_FRAME" -o "$HOME/Media/BGR_""$(date +"%S")".mov
-          rm files.txt
-        done
-        echo "Done!"
-      ;;
-    "GIF")
-        IFS=$'\n'
-        for FILE in $(cat files.txt);
-        do
-          backgroundremover -i "$FILE" -m "$R_TYPE" -tg -fr "$R_FRAME" -o "$HOME/Media/BGR_""$(date +"%S")".gif
-          rm files.txt
-        done
-        echo "Done!"
-      ;;
-  esac
+process_video() {
+  local extension="$1"
+  IFS=$'\n'
+  for FILE in $(cat "$FILES_LIST"); do
+    OUTPUT_DIR="$HOME/Media/"
+    mkdir -p "$OUTPUT_DIR"  # Create the output directory if it doesn't exist
+    OUTPUT_FILE="$OUTPUT_DIR/BGR_$(date +"%S").$extension"
+    backgroundremover -i "$FILE" -m "$R_TYPE" -t"$extension" -fr "$R_FRAME" -o "$OUTPUT_FILE"
+  done
+  echo "Done!"
+}
+
+process_image() {
+  IFS=$'\n'
+  for FILE in $(cat "$FILES_LIST"); do
+    OUTPUT_DIR="$HOME/Media/"
+    mkdir -p "$OUTPUT_DIR"  # Create the output directory if it doesn't exist
+    OUTPUT_FILE="$OUTPUT_DIR/BGR_$(date +"%S").png"
+    backgroundremover -i "$FILE" -m "$R_TYPE" -o "$OUTPUT_FILE"
+  done
+  echo "Done!"
 }
 
 MediaType() {
   m_type=$(zenity --title "What type of media is it?" --list --column "TYPE" "Video" "Image" --width 820 --height 460 --hide-header)
   case $m_type in
     "Video")
-       RemovalType
-       FrameRate
-       VideoFormat
+      RemovalType
+      FrameRate
+      process_video "mov"
       ;;
     "Image")
-       RemovalType
-        IFS=$'\n'
-        for FILE in $(cat files.txt);
-        do
-          backgroundremover -i "$FILE" -m "$R_TYPE" -o "$HOME/Media/BGR_$(date +"%S")".png
-          rm files.txt
-        done
-        echo "Done!"
+      RemovalType
+      process_image
+      ;;
+    *)
+      echo "Invalid option"
+      exit 1
       ;;
   esac
 }
