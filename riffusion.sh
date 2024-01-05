@@ -3,8 +3,9 @@
 WORKDIR=$HOME/.virtualenv/riffusion/
 
 Launch() {
-    source $WORKDIR/bin/activate
-    riffusion
+  cd $WORKDIR
+  source $WORKDIR/bin/activate
+  python -m riffusion.streamlit.playground
 }
 
 Launch
