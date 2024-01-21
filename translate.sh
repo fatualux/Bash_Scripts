@@ -40,6 +40,7 @@ translate_cmd() {
   echo ""
   echo -e '\e[40m\e[92m'
   echo "$output"
+  zenity --info --text=".: $output :. has been copied to clipboard."
   echo "$output" | wl-copy
   echo -e '\e[0m'
   echo ""
