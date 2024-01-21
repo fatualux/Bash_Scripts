@@ -1,18 +1,18 @@
 [
   {
     "name": "Image",
-    "choice": " artwork, picture, photograph, portrait, landscape, view, scenery"
+    "choice": " artwork, picture, photograph, portrait, landscape, view, scenery, close up, painting, engrave, oil painting, watercolor, sketch, sketchbook, drawing, ink art, sculpture, canvas"
   },
   {
     "name": "Style",
-    "choice": " digital art, photorealistic, comic book, anime, noir movie, cinematic, monochrome, epic, psychedelic, 8k, futuristic, sci-fi, cyberpunk"
+    "choice": " digital art, photorealistic, comic book, anime, noir movie, cinematic, monochrome, epic, psychedelic, 8k, futuristic, sci-fi, cyberpunkz, abstract, 3d, horror"
   },
   {
     "name": "Light",
-    "choice": " warm light, soft glow, natural light, bright light, neon light,  soft ambient light"
+    "choice": " warm light, soft glow, natural light, bright light, neon light,  soft ambient lighti, cold light"
   },
   {
     "name": "Custom",
-    "choice": " highresfix, work of art, masterpiece"
+    "choice": " highresfix, work of art, masterpiece, ultra detailed, complex composition, detailed, rich composition, professional shot, award winning"
   }
 ]
