@@ -13,7 +13,7 @@ start_recording() {
     else
         touch "$flag_file"
         echo "Recording started. Press Ctrl+C to stop."
-        wf-recorder -f "$output_file" &
+        wf-recorder -f "$output_file" -x yuv420p &
         echo $! > "$pid_file"  # Save the PID of the wf-recorder process
     fi
 }
