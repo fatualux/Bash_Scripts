@@ -19,3 +19,5 @@
 ## [ALARM.SH](./doc/alarm.md)
 
 ## [CONVERTER.SH](./doc/converter.md)
+
+## [DOWNLOADER.SH](./doc/downloader.md)
