@@ -21,3 +21,5 @@
 ## [CONVERTER.SH](./doc/converter.md)
 
 ## [DOWNLOADER.SH](./doc/downloader.md)
+
+## [RM_DUPS.SH](./doc/rm_dups.md)
