@@ -22,7 +22,6 @@ CONFIG_DIRS=(
     ".fontconfig"
     ".local/share"
     ".scripts"
-    "Apps"
     ".themes"
     ".fonts"
     ".w3m"
