@@ -23,3 +23,5 @@
 ## [DOWNLOADER.SH](./doc/downloader.md)
 
 ## [RM_DUPS.SH](./doc/rm_dups.md)
+
+## [SILENCE_SPLITTER.SH](./doc/silence_splitter.md)
