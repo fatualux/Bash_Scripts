@@ -2,31 +2,89 @@
 #It is a basic bash script to interact with ffmpeg (very few options added by now)
 #It depends on bash zenity ffmpeg
 
-sel_vid_format() {
+OUTPUT_DIR=$(pwd)/CONVERTED/
+FILES_LIST=/tmp/files.txt
+
+sel_width() {
+  WIDTH=$(zenity --entry --title "Enter the desired width:" --text "Enter the desired width for the image")
+  export WIDTH
+}
+
+sel_height() {
+  HEIGHT=$(zenity --entry --title "Enter the desired height:" --text "Enter the desired height for the image")
+  export HEIGHT
+}
+
+sel_framerate() {
+  FPS=$(zenity --entry --title "Enter the framerate" --text "Enter the desired framerate:")
+  [[ "$FPS" ]] || exit 1
+}
+
+list_ratios() {
+  echo "Common resolutions:"
+  echo "1080p: 1920x1080 16:9"
+  echo "720p: 1280x720 16:9"
+  echo "480p: 854x480 16:9"
+  echo "360p: 640x360 16:9"
+  echo "240p: 426x240 16:9"
+  echo "144p: 256x144 16:9"
+  sel_width
+  sel_height
+}
+
+sel_dir() {
+  dir=$(zenity --file-selection --directory)
+  export DIR=$dir
+}
+
+sel_file() {
+  files=$(zenity --title "Select a one or more files:"  --file-selection --multiple --filename=$(pwd)/)
+  [[ "$files" ]] || exit 1
+  echo $files | tr "|" "\n" | while read file
+  do
+    echo "$file" >> /tmp/files.txt
+  done
+}
+
+vid_to_gif() {
+  sel_framerate
+  list_ratios
+  mkdir -p $OUTPUT_DIR
+  for FILE in $(cat $FILES_LIST); do
+    FILENAME=$(basename "$FILE")
+    OUTPUT_FILE="$OUTPUT_DIR${FILENAME%.*}.gif"
+    ffmpeg -i $FILE -vf scale=$WIDTH:$HEIGHT $OUTPUT_FILE
+  done
+}
+
+sel_media_format() {
   option=$(zenity --list --title "Video Format" --text "Select a video format:" \
-  --column "MEDIA FORMAT:" "mp3" "flac" "wav" "opus" "mp4" "mkv" "avi" \
+  --column "MEDIA FORMAT:" "mp3" "flac" "wav" "opus" "mp4" "mkv" "avi" "gif" \
   --hide-header --width=820 --height=460 --ok-label="OK" --cancel-label="Cancel")
   case $option in
     "mp3")
-      export V_FORMAT="mp3"
+      export M_FORMAT="mp3"
       ;;
     "flac")
-      export V_FORMAT="flac"
+      export M_FORMAT="flac"
       ;;
     "wav")
-      export V_FORMAT="wav"
+      export M_FORMAT="wav"
       ;;
     "opus")
-      export V_FORMAT="opus"
+      export M_FORMAT="opus"
       ;;
     "mp4")
-      export V_FORMAT="mp4"
+      export M_FORMAT="mp4"
       ;;
     "mkv")
-      export V_FORMAT="mkv"
+      export M_FORMAT="mkv"
       ;;
     "avi")
-      export V_FORMAT="avi"
+      export M_FORMAT="avi"
+      ;;
+    "gif")
+      export M_FORMAT="gif"
       ;;
   esac
 }
@@ -60,33 +118,40 @@ sel_img_format() {
   esac
 }
 
-sel_framerate() {
-  FPS=$(zenity --entry --title "Enter the framerate" --text "Enter the desired framerate:")
-  [[ "$FPS" ]] || exit 1
+media_conv() {
+  sel_file
+  sel_media_format
+  mkdir -p $OUTPUT_DIR
+  IFS=$'\n'
+  if [ "$M_FORMAT" = "gif" ]; then
+    vid_to_gif
+  else
+    for FILE in $(cat $FILES_LIST);
+    do
+      FILENAME=`basename "${FILE}"`
+      OUTPUT_FILE="$OUTPUT_DIR${FILENAME%.*}.$M_FORMAT"
+      echo "Converting $FILENAME to $OUTPUT_FILE"
+      ffmpeg -i "$FILE" -c:v libx264 -pix_fmt yuv420p "$OUTPUT_FILE"
+    done
+  fi
+  rm files.txt
+  rm $FILES_LIST
+  echo "Temporary files removed!"
 }
 
-sel_dir() {
-  dir=$(zenity --file-selection --directory)
-  export DIR=$dir
-}
-
-sel_file() {
-  files=$(zenity --title "Select a one or more files:"  --file-selection --multiple --filename=$(pwd)/)
-  [[ "$files" ]] || exit 1
-  echo $files | tr "|" "\n" | while read file
-  do
-    echo "$file" >> /tmp/files.txt
+image_conv() {
+  sel_file
+  sel_img_format
+  mkdir -p $OUTPUT_DIR
+  IFS=$'\n'
+  for FILE in $(cat "$FILES_LIST"); do
+    FILENAME=$(basename "$FILE")
+    OUTPUT_FILE="$OUTPUT_DIR${FILENAME%.*}.$I_FORMAT"
+    echo "Converting $FILENAME to $OUTPUT_FILE"
+    ffmpeg -i "$FILE" "$OUTPUT_FILE"
   done
-}
-
-sel_width() {
-  WIDTH=$(zenity --entry --title "Enter the desired width:" --text "Enter the desired width for the image")
-  export WIDTH
-}
-
-sel_height() {
-  HEIGHT=$(zenity --entry --title "Enter the desired height:" --text "Enter the desired height for the image")
-  export HEIGHT
+  rm "$FILES_LIST"
+  echo "Temporary files removed!"
 }
 
 scale() {
@@ -153,50 +218,14 @@ scale() {
   echo "Temporary files removed!"
 }
 
-media_conv() {
-  WORK_DIR=$(pwd)/CONVERTED/
-  FILES_LIST=/tmp/files.txt
-  sel_file
-  sel_vid_format
-  mkdir -p $WORK_DIR
-  IFS=$'\n'
-  for FILE in $(cat $FILES_LIST);
-  do
-    FILENAME=`basename "${FILE}"`
-    OUTPUT_FILE="$WORK_DIR${FILENAME%.*}.$V_FORMAT"
-    ffmpeg -i "$FILE" -c:v libx264 -pix_fmt yuv420p "$OUTPUT_FILE";
-  done
-  rm files.txt
-  rm $FILES_LIST
-  echo "Temporary files removed!"
-}
-
-image_conv() {
-  WORK_DIR=$(pwd)/CONVERTED/
-  FILES_LIST=/tmp/files.txt
-  sel_file
-  sel_img_format
-  mkdir -p $WORK_DIR
-  IFS=$'\n'
-  for FILE in $(cat "$FILES_LIST"); do
-    FILENAME=$(basename "$FILE")
-    OUTPUT_FILE="$WORK_DIR${FILENAME%.*}.$I_FORMAT"
-    echo "Converting $FILENAME to $OUTPUT_FILE"
-    ffmpeg -i "$FILE" "$OUTPUT_FILE"
-  done
-  rm "$FILES_LIST"
-  echo "Temporary files removed!"
-}
-
 img_vid() {
   sel_dir
   sel_img_format
   sel_vid_format
   sel_framerate
   GLOB_PATTERN="*.$I_FORMAT"
-  OUTPUT_DIR=$(pwd)/VIDEOS/
   mkdir -p $OUTPUT_DIR
-  OUTPUT_FILE="$OUTPUT_DIR$(date +%Y%m%d-%H%M%S).$V_FORMAT"
+  OUTPUT_FILE="$OUTPUT_DIR$(date +%Y%m%d-%H%M%S).$M_FORMAT"
   cd $DIR
   ffmpeg -framerate $FPS -pattern_type glob -i "$GLOB_PATTERN" -c:a copy -shortest -c:v libx264 -pix_fmt yuv420p "$OUTPUT_FILE"
   rm $FILES_LIST
@@ -205,19 +234,18 @@ img_vid() {
 }
 
 frames() {
-  WORK_DIR=$(pwd)/FRAMES/
   FILES_LIST=/tmp/files.txt
   sel_file
   sel_img_format
   sel_framerate
-  mkdir -p $WORK_DIR
+  mkdir -p $OUTPUT_DIR
   IFS=$'\n'
   for FILE in $(cat $FILES_LIST);
   do
     FILE_NAME=$(basename "$FILE")
-    OUTPUT_FILE="$WORK_DIR/frame_%05d.${I_FORMAT}"
+    OUTPUT_FILE="$OUTPUT_DIR/frame_%05d.${I_FORMAT}"
     ffmpeg -i "$FILE" -r $FPS -f image2 "$OUTPUT_FILE"
-    echo "Created $WORK_DIR/frame_%05d.${I_FORMAT}"
+    echo "Created $OUTPUT_DIR/frame_%05d.${I_FORMAT}"
   done
   rm $FILES_LIST
   echo "Temporary files removed!"
@@ -263,9 +291,6 @@ sel_action() {
       ;;
     "Scale Images")
       scale
-      ;;
-    "Scale and Crop")
-      scale_and_crop
       ;;
     "Images to video")
       img_vid
