@@ -1,15 +1,9 @@
 #!/bin/bash
 #This script opens a shell prompt, asks user for an URL and plays it with no sound.
-#It depends on: bash mpv yt-dlp
+#It depends on: bash mpv yad yt-dlp
 
-COLS=$(tput cols)
-text="Insert a YouTube Video URL:"
-h_text=${#text}
-
-printf "%*s\n" $((COLS/2+h_text/2)) "$text"
-echo ""
-echo ""
-
-read -r URL
+# precompile yad form with clipboard content
+CLIPBOARD=$(wl-paste)
+URL=$(yad --title="YouTube Stream" --form --field="YouTube URL:" "$CLIPBOARD" --width=820 --height=460)
 
 mpv $URL --ytdl-format=best --no-video --shuffle

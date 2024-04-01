@@ -3,8 +3,9 @@
 # It depends on: bash zenity python argos-translate
 
 WORKDIR="$HOME/.virtualenv/argostranslate"
-source $WORKDIR/bin/activate
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.10/site-packages/
+cd $WORKDIR && git pull
+source $WORKDIR/bin/activate && pip install --upgrade pip
+pip install -r $WORKDIR/requirements.txt && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.10/site-packages/
 
 InputLanguage(){
   CHOICE=$(zenity --list --text "Which is the language to translate from?" \

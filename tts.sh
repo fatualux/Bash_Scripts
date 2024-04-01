@@ -4,7 +4,9 @@
 
 WORKDIR="$HOME/.virtualenv/tts"
 MODEL="tts_models/multilingual/multi-dataset/your_tts"
-source $WORKDIR/bin/activate
+cd $WORKDIR && git pull
+source $WORKDIR/bin/activate && pip install --upgrade pip
+pip install -r $WORKDIR/requirements.txt
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.9/site-packages/
 

@@ -2,6 +2,8 @@
 # This script can be used to interact with 7zip, a GUI for 7-Zip. (https://www.7-zip.org)
 # It depends on: bash zenity 7z
 
+clear
+
 function display_error() {
   zenity --error --text="$1"
   exit 1
@@ -53,7 +55,7 @@ case "$action" in
     esac
     ;;
   "Extract")
-    archive_name=$(zenity --file-selection --title="Select Archive to Extract")
+    archive_name=$(zenity --file-selection --multiple --title="Select Archive to Extract")
     output_directory=$(zenity --file-selection --directory --title="Select Output Directory")
 
     # Extract the files

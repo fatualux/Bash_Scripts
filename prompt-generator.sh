@@ -24,7 +24,9 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Read JSON_FILE.json using jq
 JSON_FILE=$(jq -c '.' "$DIR/prompt.json")
 
-WORKDIR=$HOME/.virtualenv/PromptGenerator
+# launch the script in Alacritty shell
+
+WORKDIR=$HOME/.virtualenv/prompt-generator
 
 input_subject() {
     subject=$(yad --entry --title="Input Subject" --text="What is the subject of your prompt?")
@@ -79,25 +81,6 @@ add_custom() {
     select_multiple_choices "custom" "$custom_list"
 }
 
-launch_generator() {
-    ACTIVATE_SCRIPT="$WORKDIR/bin/activate"
-
-    # Check if the activation script exists
-    if [ -e "$ACTIVATE_SCRIPT" ]; then
-        # Execute the activation script in the current shell session
-        cd "$WORKDIR" && source "$ACTIVATE_SCRIPT"
-
-        # Construct the prompt and export it
-        export PROMPT="$IMAGE of $SUBJECT $ACTION, $STYLE, $LIGHT, $CUSTOM"
-
-        # Execute the streamlit run command
-        streamlit run "$WORKDIR/app.py"
-    else
-        echo "Error: Activation script not found. Exiting..."
-        exit 1
-    fi
-}
-
 paste_to_clipboard() {
     # Construct the prompt
     PROMPT="$IMAGE of $SUBJECT $ACTION, $STYLE, $LIGHT, $CUSTOM"
@@ -106,10 +89,18 @@ paste_to_clipboard() {
     if command -v wl-copy >/dev/null 2>&1; then
         # Copy the prompt to the clipboard using wl-copy
         wl-copy < <(echo "$PROMPT")
-        echo "Prompt copied to clipboard."
+        clear && echo "Prompt copied to clipboard."
     else
         echo "Error: wl-copy not found. Please install it to copy the prompt to the clipboard."
     fi
+}
+
+launch_generator() {
+    WORKDIR=$HOME/Documents/Projects/sd-prompt-generator/
+    APP="promptgen.py"
+    virtualenv "$WORKDIR"
+    source "$WORKDIR/bin/activate"
+    python $WORKDIR$APP
 }
 
 # Call the input functions
@@ -124,4 +115,4 @@ add_custom
 paste_to_clipboard
 
 # Call the launch_generator function
-launch_generator
+# launch_generator

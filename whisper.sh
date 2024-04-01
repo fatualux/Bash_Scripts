@@ -3,9 +3,9 @@
 
 WORKDIR=$HOME/.virtualenv/faster-whisper
 
-source $WORKDIR/bin/activate
-
-cd $WORKDIR
+cd $WORKDIR && git pull
+source $WORKDIR/bin/activate && pip install --upgrade pip
+pip install -r $WORKDIR/requirements.txt
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.11/site-packages/nvidia/cudnn/lib/:$WORKDIR/lib/python3.11/site-packages/nvidia/cublas/lib/
 

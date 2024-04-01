@@ -1,5 +1,6 @@
-#!/bin/sh
 # This script is based on faster-whisper (https://github.com/guillaumekln/faster-whisper)
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.11/site-packages/nvidia/cudnn/lib/:$WORKDIR/lib/python3.11/site-packages/nvidia/cublas/lib/
 
 WORKDIR=$HOME/.virtualenv/faster-whisper
 
@@ -47,7 +48,5 @@ CaptureAndSendToClipboard() {
 # Main script
 ListModels
 ListDevices
-
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.11/site-packages/nvidia/cudnn/lib/:$WORKDIR/lib/python3.11/site-packages/nvidia/cublas/lib/
 
 CaptureAndSendToClipboard

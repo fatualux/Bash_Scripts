@@ -2,7 +2,9 @@
 # This script is based on backgroundremover (https://github.com/nadermx/backgroundremover)#
 
 WORKDIR="$HOME/.virtualenv/background-remover"
-source "$WORKDIR/bin/activate"
+cd $WORKDIR && git pull
+source $WORKDIR/bin/activate && pip install --upgrade pip
+pip install -r $WORKDIR/requirements.txt && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.10/site-packages/
 
 SelectFile() {
   files=$(zenity --title "Which media file do you want to process?" --file-selection --multiple --filename="$HOME/")

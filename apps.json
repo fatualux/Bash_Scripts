@@ -2,72 +2,77 @@
   {
     "name": "Alarm",
     "path": "alarm.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "Converter",
     "path": "converter.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "Downloader",
     "path": "downloader.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "Batch renamer",
     "path": "batch_renamer.sh",
-    "command": "sh"
-  },
-  {
-    "name": "Remove Duplicates",
-    "path": "rm_dups.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "GIT Helper",
     "path": "git_helper.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "7Zip GUI",
     "path": "7zip_GUI.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
+  },
+  {
+    "name": "Remove Duplicates",
+    "path": "rm_dups.sh",
+    "command": "alacritty -e sh"
+  },
+  {
+    "name": "Split track by silence",
+    "path": "silence_splitter.sh",
+    "command": "alacritty -e sh"
   },
   {
     "name": "Virtual Env Activate",
     "path": "vactivate.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "Polymath",
     "path": "polymath.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "Whisper",
     "path": "whisper.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "Realtime Transcription",
     "path": "realtime_whisper.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "Tesseract OCR",
     "path": "tesseract.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "Translator",
     "path": "argos.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "TTS",
     "path": "tts.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "ComfyUI",
@@ -77,21 +82,21 @@
   {
     "name": "Riffusion",
     "path": "riffusion.sh",
-    "command": "sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "Background remover",
     "path": "bg_remover.sh",
-    "command": "sh"
-  },
-  {
-    "name": "Prompt Generator",
-    "path": "prompt_generator.sh",
-    "command": "foot -e sh"
+    "command": "alacritty -e sh"
   },
   {
     "name": "Ollama-UI",
     "path": "ollama.sh",
-    "command": "foot -e sh"
+    "command": "alacritty -e sh"
+  },
+  {
+    "name": "Prompt Generator",
+    "path": "prompt-generator.sh",
+    "command": "alacritty -e sh"
   }
 ]

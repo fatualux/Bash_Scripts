@@ -62,11 +62,11 @@ RepoTypeChooser() {
   if [ -n "$option" ]; then
       export TYPE=$option
       echo "Repo type selected: $TYPE"
-    if [ "$TYPE" == "Private" ]; then
-        O_TYPE="--private"
-    elif [ "$TYPE" == "Public" ]; then
-        O_TYPE="--public"
-    fi
+      if [ "$TYPE" == "Private" ]; then
+          export O_TYPE="--private"
+      elif [ "$TYPE" == "Public" ]; then
+          export O_TYPE="--public"
+      fi
   else
     echo "No repo type selected."
     exit 1
@@ -90,7 +90,7 @@ DirectoryChooser() {
 ListActions() {
   option=$(zenity --list --title "Git Helper" --text "Select an action to perform:" \
   --column "Action" "README Generator" "Repo Creator" "Repo Remover" \
-  "CLONE" "FORK" "PR Creator" "License Retriever" "Contribute" \
+  "CLONE" "PR Creator" "Contribute" \
   --hide-header --width=400 --height=400 --ok-label="OK" --cancel-label="Cancel")
   case $option in
   "README Generator")
@@ -105,14 +105,8 @@ ListActions() {
   "CLONE")
     Clone
     ;;
-  "FORK")
-    Fork
-    ;;
   "PR Creator")
     PRCreator
-    ;;
-  "License Retriever")
-    ChooseLicense
     ;;
   "Contribute")
     Contribute
@@ -268,18 +262,6 @@ Clone() {
   if [ -n "$REPO_NAME" ]; then
       git clone "$REPO_NAME"
       echo "Repo cloned: $REPO_NAME"
-  else
-      echo "No repository name provided."
-      exit 1
-  fi
-}
-
-Fork() {
-  PlatformChooser
-  REPO_NAME=$(zenity --entry --title "Fork" --text "What is the name of the repository you want to fork?" --ok-label="OK" --cancel-label="Cancel")
-  if [ -n "$REPO_NAME" ]; then
-      $CLI fork "$REPO_NAME"
-      echo "Repo forked: $REPO_NAME"
   else
       echo "No repository name provided."
       exit 1

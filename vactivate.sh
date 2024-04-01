@@ -2,6 +2,8 @@
 # Choose from a list of Python virtualenvs and sends the commands to activate it to wl-copy.
 # It depends on bash zenity wl-clipboard
 
+clear
+
 WORKDIR=$HOME/.virtualenv
 
 ChooseVenv(){
