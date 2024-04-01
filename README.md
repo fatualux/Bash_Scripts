@@ -25,3 +25,10 @@
 ## [RM_DUPS.SH](./doc/rm_dups.md)
 
 ## [SILENCE_SPLITTER.SH](./doc/silence_splitter.md)
+
+## LICENSE
+
+[![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+
+This project is licensed under the GPLv3 license.
+See LICENSE file for more details.
