@@ -221,7 +221,7 @@ scale() {
 img_vid() {
   sel_dir
   sel_img_format
-  sel_vid_format
+  sel_media_format
   sel_framerate
   GLOB_PATTERN="*.$I_FORMAT"
   mkdir -p $OUTPUT_DIR
