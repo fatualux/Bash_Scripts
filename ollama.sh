@@ -12,11 +12,21 @@ check_dependencies() {
     echo "All dependencies satisfied."
   else
     echo "The following dependencies are missing: ${missing[*]}"
-    read -p "Press OK to exit." -n 1 -r
+    read -p "Press any key to exit." -n 1 -r
     echo
     exit 1
   fi
 }
+
+cleanup() {
+  # Terminate ollama process if it's running
+  if pgrep -x "ollama" >/dev/null; then
+    echo "Terminating ollama process..."
+    pkill -x "ollama"
+  fi
+}
+
+trap cleanup EXIT
 
 check_dependencies
 
@@ -25,11 +35,9 @@ PORT="${1-8000}"
 
 webui() {
   cd "$WEBUI_DIR" || exit
-  source bin/activate  && pip install --upgrade pip|| exit
+  source bin/activate && pip install --upgrade pip || exit
   pip install -r requirements.txt -U
-  bash start.sh
+  ollama serve | bash start.sh
 }
 
-#while true; do
 webui
-#done
