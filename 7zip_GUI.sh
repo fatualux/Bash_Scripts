@@ -9,7 +9,8 @@ function check_dependencies() {
   local dependencies=("zenity" "7z")
 
   for dep in "${dependencies[@]}"; do
-    command -v "$dep" &> /dev/null || display_error "Error: $dep is not installed. Please install it before running this script."
+    message="Error: $dep is not installed. Please install it before running this script."
+    command -v "$dep" &> /dev/null || display_error "$message"
   done
 }
 
