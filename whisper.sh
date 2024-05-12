@@ -1,13 +1,13 @@
 #!/bin/sh
 #This script is based on faster-whisper (https://github.com/guillaumekln/faster-whisper)
 
-WORKDIR=$HOME/.virtualenv/faster-whisper
+WORKDIR=$HOME/.virtualenv/whisper
 
 cd $WORKDIR && git pull
 source $WORKDIR/bin/activate && pip install --upgrade pip
 pip install -r $WORKDIR/requirements.txt
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.11/site-packages/nvidia/cudnn/lib/:$WORKDIR/lib/python3.11/site-packages/nvidia/cublas/lib/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.12/site-packages/nvidia/cudnn/lib/:$WORKDIR/lib/python3.12/site-packages/nvidia/cublas/lib/
 
 SelectFile() {
   FILES_LIST=files.txt

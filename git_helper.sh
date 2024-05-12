@@ -136,11 +136,6 @@ ChooseLicense() {
   echo "" >> $WORK_DIR/README.md
   echo "This project is licensed under the $license_name license." >> $WORK_DIR/README.md
   echo "See LICENSE file for more details." >> $WORK_DIR/README.md
-  if [[ $selected_license == "GPLv2" || $selected_license == "GPLv3" || $selected_license == "LGPLv3" || $selected_license == "AGPLv3" ]]; then
-    gnu_version=$(zenity --list --title "Choose a version" --text "Select a version:" \
-    --column "Version" "V1" "V2" "V3")
-    echo "Selected GNU version: $gnu_version"
-  fi
 }
 
 READMEGenerator() {
