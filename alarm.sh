@@ -1,6 +1,4 @@
 #!/bin/bash
-# It is a basic bash script to set a simple alarm, based on the interval set by the user's input.
-# It depends on bash, dunstify, espeak, and zenity.
 
 # Check if Zenity and Espeak are installed
 if ! command -v zenity &> /dev/null || ! command -v espeak &> /dev/null; then
@@ -177,4 +175,3 @@ espeak "Stop please. It's time to shut down"
 zenity --info --title="Time's up" --text="It's time to quit!" --timeout=5
 
 read -p "Press Enter to exit..."
-
