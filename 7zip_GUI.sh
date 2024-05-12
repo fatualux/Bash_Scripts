@@ -14,12 +14,10 @@ function check_dependencies() {
 }
 
 action_chooser() {
-  zenity --list --title="7zip GUI" --column="Action" "Compress" "Extract"
-  echo "Debug: \$action is '$action'"
+  action=$(zenity --list --title="7zip GUI" --column="Action" "Compress" "Extract" --width=400 --height=400 --ok-label="OK" --cancel-label="Cancel")
   case "$action" in
     "Compress")
       archive_operation=$(zenity --list --title="Archive Operation" --column="Operation" "Create New Archive" "Add to Existing Archive")
-      echo "Debug: \$archive_operation is '$archive_operation'"
       case "$archive_operation" in
         "Create New Archive")
           archive_name=$(zenity --entry --title="Archive Name")
@@ -32,8 +30,6 @@ action_chooser() {
         "Add to Existing Archive")
           archive_name=$(zenity --file-selection --title="Select Existing Archive")
           add_file_names=$(zenity --file-selection --multiple --title="Select Files to Add")
-
-          # Add files to the existing archive
           7z u "${archive_name}" ${add_file_names//|/ } || display_error "Adding files failed"
           ;;
         *)
