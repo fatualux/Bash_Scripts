@@ -1,9 +1,9 @@
 # FFMPEG Converter Script
 
+## Overview
 This Bash script provides a user-friendly interface to interact with ffmpeg. It utilizes Zenity for GUI dialogs and is designed for various media conversion tasks.
 
-## Dependencies
-
+## Requirements
 Ensure the following dependencies are installed:
 
 - [bash](https://www.gnu.org/software/bash/)
@@ -11,24 +11,24 @@ Ensure the following dependencies are installed:
 - [ffmpeg](https://ffmpeg.org/)
 
 ## Usage
+Clone the repository or download the script.
+Make the script executable:
 
-1. Run the script in a terminal:
+```
+chmod +x converter.sh
+```
 
-   ```bash
-   ./ffmpeg_converter.sh
-   ```
-2. Choose an action from the list provided by Zenity: Media Converter, Image Converter, Scale Images, Images to Video, Video to Frames, Invert Frames, or Detect Framerate.
+Run the script:
 
-3. Depending on your choice, follow the prompts to select files, formats, and other options.
+```
+./converter.sh
+```
 
-4. The script will perform the chosen operation, and the output will be saved in the specified directories.
-
-Notes
-
-- The script uses Zenity for user interaction, so ensure it is installed.
-
-- Press Enter to exit the script after the chosen operation is completed.
-
-- The temporary files are removed automatically after each operation.
-
-- The script provides various actions for media conversion, image conversion, scaling images, creating videos from images, extracting frames from videos, inverting frames, and detecting the framerate of videos.
+## Features
+- Media Converter: Allows you to convert media files from one format to another.
+- Image Converter: Allows you to convert images from one format to another.
+- Scale Images: Allows you to resize images.
+- Images to Video: Converts images to video.
+- Video to Frames: Extracts frames from a video.
+- Invert Frames: Inverts the colors of a video.
+- Detect Framerate: Detects the framerate of a video.

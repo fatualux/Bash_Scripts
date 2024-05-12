@@ -12,6 +12,8 @@
 
 ## [LAUNCHER.SH](./doc/launcher.md)
 
+## [ARCHBACKUP.SH](./doc/archBackup.md)
+
 ## [7zipGUI.SH](./doc/7zipGUI.md)
 
 ## [TRANSLATE.SH](./doc/translate.md)

@@ -1,23 +1,14 @@
 # 7zip GUI Script
 
+## Overview
 This Bash script provides a graphical user interface (GUI) for interacting with 7-Zip, allowing users to compress and extract files easily. The script relies on `zenity` for GUI dialogs and `7z` for compression and extraction.
 
-## Prerequisites
-
-Ensure that the following dependencies are installed:
-
-- Bash
-- Zenity
-- 7z (7-Zip)
-
-You can install the dependencies using your package manager. For example, on Debian-based systems:
-
-```
-sudo apt-get install bash zenity p7zip-full
-```
+## Requirements
+* Zenity installed
+* 7-Zip installed
+* Bash shell
 
 ## Usage
-
 Clone the repository or download the script.
 Make the script executable:
 
@@ -33,8 +24,7 @@ Run the script:
 
 The script will prompt you to choose an action (Compress or Extract) and guide you through the process using Zenity dialogs.
 
-Features
-
+## Features
 Compress files into a new archive or add to an existing archive.
 Choose compression methods (7z, zip, tar, tar.gz, tar.bz2) and compression levels.
 Extract files from an archive to a specified output directory.

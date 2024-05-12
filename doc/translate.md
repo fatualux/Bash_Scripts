@@ -1,9 +1,9 @@
 # Translation Script
 
+## Overview
 This Bash script allows you to select a language and translate a given text using the `trans` command. It utilizes Zenity for GUI dialogs.
 
-## Dependencies
-
+## Requirements
 Make sure the following dependencies are installed:
 
 - [Zenity](https://help.gnome.org/users/zenity/stable/)
@@ -11,7 +11,6 @@ Make sure the following dependencies are installed:
 - [wl-clipboard](https://github.com/bugaevc/wl-clipboard)
 
 ## Usage
-
 1. Run the script in a terminal:
 
    ```
