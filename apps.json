@@ -20,11 +20,6 @@
     "command": "alacritty -e sh"
   },
   {
-    "name": "GIT Helper",
-    "path": "git_helper.sh",
-    "command": "alacritty -e sh"
-  },
-  {
     "name": "7Zip GUI",
     "path": "7zip_GUI.sh",
     "command": "alacritty -e sh"
@@ -35,28 +30,13 @@
     "command": "alacritty -e sh"
   },
   {
-    "name": "Split track by silence",
-    "path": "silence_splitter.sh",
-    "command": "alacritty -e sh"
-  },
-  {
     "name": "Virtual Env Activate",
     "path": "vactivate.sh",
     "command": "alacritty -e sh"
   },
   {
-    "name": "Polymath",
-    "path": "polymath.sh",
-    "command": "alacritty -e sh"
-  },
-  {
     "name": "Whisper",
     "path": "whisper.sh",
-    "command": "alacritty -e sh"
-  },
-  {
-    "name": "Realtime Transcription",
-    "path": "realtime_whisper.sh",
     "command": "alacritty -e sh"
   },
   {
@@ -82,11 +62,6 @@
   {
     "name": "Riffusion",
     "path": "riffusion.sh",
-    "command": "alacritty -e sh"
-  },
-  {
-    "name": "Background remover",
-    "path": "bg_remover.sh",
     "command": "alacritty -e sh"
   },
   {
