@@ -22,7 +22,7 @@ git_helper() {
     exit 1
   fi
   echo "Git repo URL: $GIT_REPO"
-  GIT_URL="https://${GIT_PLATFORM}.com/${GIT_USER}/${GIT_REPO}"  # Fixed the typo here
+  GIT_URL="https://${GIT_PLATFORM}.com/${GIT_USER}/${GIT_REPO}"
   git clone "$GIT_URL"
   MSG="Successfully cloned repository: $GIT_URL"
   echo "$MSG"
