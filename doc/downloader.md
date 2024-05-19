@@ -1,7 +1,8 @@
 # YouTube Downloader Script
 
 ## Overview
-This Bash script provides a user-friendly interface to interact with yt-dlp, a powerful YouTube downloader. It utilizes Zenity for GUI dialogs and is designed to download videos, extract audio, or download entire video or audio playlists.
+This Bash script provides a user-friendly interface to interact with yt-dlp, a powerful YouTube downloader.
+It uses Zenity for GUI dialogs and is designed to download videos, extract audio, or download entire video or audio playlists.
 
 ## Requirements
 Ensure the following dependencies are installed:
