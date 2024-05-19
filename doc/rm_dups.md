@@ -1,17 +1,19 @@
 # Duplicate File Remover Script
 
 ## Overview
-This Bash script provides a simple interface to identify and remove duplicate files within a selected directory. It utilizes Zenity for GUI dialogs and displays a progress bar during the removal process. The script prompts the user for confirmation before removing duplicate files and provides information about the removed files and the freed-up storage space.
+This Bash script provides a simple interface to identify and remove duplicate files within a selected directory.
+It uses Zenity for GUI dialogs and displays a progress bar during the removal process.
+The script prompts the user for confirmation before removing duplicate files and provides information about the removed files and the freed-up storage space.
 
 ## Requirements
 Ensure that the following dependencies are installed:
 - [Zenity](https://help.gnome.org/users/zenity/stable/)
 
 ## Usage
-1. Run the script in a terminal:
+1. Make the script executable and run it in a terminal:
 
-   ```bash
-   ./rm_dups.sh
+   ```basha
+   chmod +x rm_dups.sh && ./rm_dups.sh
    ```
 2. The script will prompt you to select a directory for duplicate file scanning.
 
