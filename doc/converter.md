@@ -6,7 +6,6 @@ This Bash script provides a user-friendly interface to interact with ffmpeg. It 
 ## Requirements
 Ensure the following dependencies are installed:
 
-- [bash](https://www.gnu.org/software/bash/)
 - [zenity](https://help.gnome.org/users/zenity/stable/)
 - [ffmpeg](https://ffmpeg.org/)
 
@@ -30,5 +29,5 @@ Run the script:
 - Scale Images: Allows you to resize images.
 - Images to Video: Converts images to video.
 - Video to Frames: Extracts frames from a video.
-- Invert Frames: Inverts the colors of a video.
+- Invert Frames: Inverts the sequence of the frames in a video.
 - Detect Framerate: Detects the framerate of a video.
