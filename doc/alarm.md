@@ -7,7 +7,6 @@ The script uses various dependencies such as bash, dunstify, espeak, and zenity.
 
 ## Requirements
 Make sure you have the following dependencies installed:
-- bash
 - dunstify
 - espeak
 - zenity
