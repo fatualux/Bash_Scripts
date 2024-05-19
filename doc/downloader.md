@@ -9,7 +9,7 @@ Ensure the following dependencies are installed:
 
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp)
 - [Zenity](https://help.gnome.org/users/zenity/stable/)
-- [wl-clipboard](https://github.com/bugaevc/wl-clipboard)
+- [wl-clipboard](https://github.com/bugaevc/wl-clipboard) - needed to detect clipboard contents
 
 ## Usage
 Clone the repository or download the script.
