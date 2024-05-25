@@ -113,3 +113,4 @@ AUR_PKG_LIST="$ARCH_BACKUP_DIR/cust-pkglist.txt"
 create_pkg_list "AUR" "$AUR_PKG_LIST"
 
 zenity --info --text="Backup and package list creation completed."
+zenity --info --text="To restore packages, simply run \"pacman -S --needed - < $REPO_PKG_LIST\" or \"pacman -S --needed - < $AUR_PKG_LIST\"."
