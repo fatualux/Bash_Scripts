@@ -14,7 +14,6 @@ if [[ -z $DESTINATION_FOLDER ]]; then
     exit 1
 fi
 
-# Define the list of files and folders to backup (excluding .virtualenv)
 CONFIG_FILES=(
     ".bashrc"
     ".vimrc"
@@ -23,6 +22,7 @@ CONFIG_FILES=(
 )
 
 CONFIG_DIRS=(
+    ".bash"
     ".config"
     ".fontconfig"
     ".local/share"
