@@ -3,6 +3,7 @@
 # Function to prompt user with yes/no dialog
 function confirm_backup {
     zenity --question --text="$1 $2?"
+    return $?
 }
 
 # Ask the user for the destination folder using Zenity
@@ -40,52 +41,79 @@ if [[ ! -d "$ARCH_BACKUP_DIR" ]]; then
     mkdir -p "$ARCH_BACKUP_DIR"
 fi
 
-# Create a tar archive of the files and directories (excluding .virtualenv)
-TAR_CONF="$ARCH_BACKUP_DIR/dotconf.tar.gz"
-TODO=("${CONFIG_FILES[@]}" "${CONFIG_DIRS[@]}")
+# Confirm before creating a tar archive of the files and directories
+confirm_backup "Create backup" "of config files and directories"
+if [[ $? -eq 0 ]]; then
+    TAR_CONF="$ARCH_BACKUP_DIR/dotconf.tar.gz"
 
-(
-  # Start a subshell for progress bar
-  (
-    echo "10"
-    sleep 1
-    echo "30"
-    for item in "${CONFIG_FILES[@]}" "${CONFIG_DIRS[@]}"; do
-        confirm_backup "Backup" "$item"
-        if [[ $? -eq 0 ]]; then
-            tar -czvf "$TAR_CONF" -C "$HOME" "$item"
-        fi
+    (
+        # Start a subshell for progress bar
+        (
+            echo "10"
+            sleep 1
+            echo "30"
+            tar -czvf "$TAR_CONF" -C "$HOME" "${CONFIG_FILES[@]}"
+            echo "100"
+        ) | zenity --progress --title="Creating Config Archive" --text="Please wait..." --percentage=0 --auto-close --auto-kill
+    )
+
+    zenity --info --text="Config archive created in $TAR_CONF"
+
+    # Inform the user after each file is backed up
+    for item in "${CONFIG_FILES[@]}"; do
+        zenity --info --text="Backup of $item completed."
     done
-    echo "100"
-  ) | zenity --progress --title="Creating Config Archive" --text="Please wait..." --percentage=0 --auto-close --auto-kill
-)
+else
+    zenity --info --text="Backup of config files and directories skipped."
+fi
 
-zenity --info --text="Config archive created in $TAR_CONF"
-
-# Create a separate tarball for the .virtualenv directory in the ARCH_BACKUP directory
-VENV_DIR="$ARCH_BACKUP_DIR/virtualenv.tar.gz"
-
-(
-  # Start a subshell for progress bar
-  (
-    echo "10"
-    sleep 1
-    echo "30"
-    confirm_backup "Backup" ".virtualenv"
+# Backup each directory with confirmation
+for dir in "${CONFIG_DIRS[@]}"; do
+    confirm_backup "Create backup" "of $dir directory"
     if [[ $? -eq 0 ]]; then
-        tar -czvf "$VENV_DIR" -C "$HOME" ".virtualenv"
-    fi
-    echo "100"
-  ) | zenity --progress --title="Creating .virtualenv Archive" --text="Please wait..." --percentage=0 --auto-close --auto-kill
-)
+        (
+            # Start a subshell for progress bar
+            (
+                echo "10"
+                sleep 1
+                echo "30"
+                tar -czvf "$ARCH_BACKUP_DIR/${dir//\//_}.tar.gz" -C "$HOME" "$dir"
+                echo "100"
+            ) | zenity --progress --title="Creating Archive for $dir" --text="Please wait..." --percentage=0 --auto-close --auto-kill
+        )
 
-zenity --info --text=".virtualenv archive created in $VENV_DIR"
+        zenity --info --text="Backup of $dir completed."
+    else
+        zenity --info --text="Backup of $dir skipped."
+    fi
+done
+
+# Confirm before creating a separate tarball for the .virtualenv directory
+confirm_backup "Create backup" "of .virtualenv directory"
+if [[ $? -eq 0 ]]; then
+    VENV_DIR="$ARCH_BACKUP_DIR/virtualenv.tar.gz"
+
+    (
+        # Start a subshell for progress bar
+        (
+            echo "10"
+            sleep 1
+            echo "30"
+            tar -czvf "$VENV_DIR" -C "$HOME" ".virtualenv"
+            echo "100"
+        ) | zenity --progress --title="Creating .virtualenv Archive" --text="Please wait..." --percentage=0 --auto-close --auto-kill
+    )
+
+    zenity --info --text=".virtualenv archive created in $VENV_DIR"
+else
+    zenity --info --text="Backup of .virtualenv directory skipped."
+fi
 
 # Function to create package list
 function create_pkg_list {
     pkg_list_type=$1
     pkg_list_file=$2
-    confirm_backup "Create $pkg_list_type" "Package List"
+    confirm_backup "Create $pkg_list_type" "package list"
     if [[ $? -eq 0 ]]; then
         (
             echo "10"
@@ -104,13 +132,49 @@ function create_pkg_list {
     fi
 }
 
-# List packages from the official repo
+# Confirm before listing packages from the official repo
 REPO_PKG_LIST="$ARCH_BACKUP_DIR/repo-pkglist.txt"
 create_pkg_list "Repo" "$REPO_PKG_LIST"
 
-# List foreign packages (custom e.g. AUR)
+# Confirm before listing foreign packages (custom e.g. AUR)
 AUR_PKG_LIST="$ARCH_BACKUP_DIR/cust-pkglist.txt"
 create_pkg_list "AUR" "$AUR_PKG_LIST"
 
 zenity --info --text="Backup and package list creation completed."
-zenity --info --text="To restore packages, simply run \"pacman -S --needed - < $REPO_PKG_LIST\" or \"pacman -S --needed - < $AUR_PKG_LIST\"."
+
+# Create the restore script and make it executable
+RESTORE_SCRIPT="$ARCH_BACKUP_DIR/restore.sh"
+
+cat << 'EOF' > "$RESTORE_SCRIPT"
+#!/bin/bash
+
+# Update the system
+sudo pacman -Syu
+
+# Install packages from the official repositories
+if [[ -f "./repo-pkglist.txt" ]]; then
+  sudo pacman -S --needed - < "./repo-pkglist.txt"
+else
+  echo "Error: Repository package list not found."
+  exit 1
+fi
+
+# Install packages from the AUR
+if command -v trizen > /dev/null 2>&1; then
+  if [[ -f "./cust-pkglist.txt" ]]; then
+    trizen -S --needed - < "./cust-pkglist.txt"
+  else
+    echo "Error: AUR package list not found."
+    exit 1
+  fi
+else
+  echo "Error: Trizen is not installed."
+  exit 1
+fi
+EOF
+
+chmod +x "$RESTORE_SCRIPT"
+
+# Notify the user about the restore script creation
+zenity --info --text="Restore script created in $ARCH_BACKUP_DIR"
+zenity --info --text="To restore the backup, run $ARCH_BACKUP_DIR/restore.sh"
