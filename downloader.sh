@@ -60,7 +60,7 @@ if [ "$ACTION" = "download" ]; then
   echo "VIDEO DOWNLOADER"
   InsertURL
   echo "Searching for available formats..."
-  DownloadFunction yt-dlp -o "Media/$(date +%Y%m%d-%H%M%S)-%(title)s" -i --hls-prefer-ffmpeg
+  DownloadFunction yt-dlp -o "Downloaded_Video/$(date +%Y%m%d-%H%M%S)-%(title)s" -i --hls-prefer-ffmpeg
   echo "Done!"
   rm urls.txt
   echo "Video Download Completed!"
@@ -70,7 +70,7 @@ if [ "$ACTION" = "extract" ]; then
   echo ""
   echo "AUDIO EXTRACTOR"
   InsertURL
-  DownloadFunction yt-dlp --audio-quality "ba" -x " --audio-format mp3 $URL" -o "Media/$(date +%Y%m%d-%H%M%S)-%(title)s.%(ext)s"
+  DownloadFunction yt-dlp --audio-quality "ba" -x " --audio-format mp3 $URL" -o "Extracted_Audio/$(date +%Y%m%d-%H%M%S)-%(title)s.%(ext)s"
   echo "Done!"
   rm urls.txt
   echo "Audio Extraction Completed!"
