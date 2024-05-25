@@ -99,7 +99,7 @@ Command_Lang() {
   IFS=$'\n'
   for FILE in $(cat $FILES_LIST);
   do
-    whisper-ctranslate2 "$FILE" --language "$LANG" --model "$MODEL" --model_dir $WORKDIR/models --device cuda --output_format "$FORMAT" --output_dir "$HOME/Media/" --print_colors "$COLORS" --word_timestamps "$HIGHLIGHT" --highlight_words "$HIGHLIGHT"
+    whisper-ctranslate2 "$FILE" --language "$LANG" --model "$MODEL" --model_dir $WORKDIR/models --device cuda --output_format "$FORMAT" --output_dir "$HOME/Transcripts/" --print_colors "$COLORS" --word_timestamps "$HIGHLIGHT" --highlight_words "$HIGHLIGHT"
   done
   rm $FILES_LIST
   echo "Done!"
@@ -109,7 +109,7 @@ Command_Auto() {
   IFS=$'\n'
   for FILE in $(cat $FILES_LIST);
   do
-    whisper-ctranslate2 "$FILE" --model "$MODEL" --model_dir $WORKDIR/models --device cuda --output_format "$FORMAT" --output_dir "$HOME/Media/" --print_colors "$COLORS" --word_timestamps "$HIGHLIGHT" --highlight_words "$HIGHLIGHT"
+    whisper-ctranslate2 "$FILE" --model "$MODEL" --model_dir $WORKDIR/models --device cuda --output_format "$FORMAT" --output_dir "$HOME/Transcripts/" --print_colors "$COLORS" --word_timestamps "$HIGHLIGHT" --highlight_words "$HIGHLIGHT"
   done
   rm $FILES_LIST
   echo "Done!"
