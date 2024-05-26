@@ -6,7 +6,6 @@ if ! command -v zenity &> /dev/null; then
     exit 1
 fi
 
-# Function to choose directory using Zenity
 choose_directory() {
     local directory=$(zenity --file-selection --directory --title="$1")
     echo "$directory"
@@ -41,23 +40,18 @@ compare_and_backup() {
     done < <(find "$source_dir" -type f -print0)
 }
 
-# Main script
-
-# Choose source directory
 source_directory=$(choose_directory "Select directory to backup")
 if [ -z "$source_directory" ]; then
     echo "Error: No directory selected."
     exit 1
 fi
 
-# Choose backup directory
 backup_directory=$(choose_directory "Select backup directory")
 if [ -z "$backup_directory" ]; then
     echo "Error: No backup directory selected."
     exit 1
 fi
 
-# Compare and backup missing files
 compare_and_backup "$source_directory" "$backup_directory"
 
 echo "Backup completed."
