@@ -40,6 +40,21 @@ sanitize_filenames() {
     done
 }
 
+# Function to remove empty directories
+remove_empty_directories() {
+    find "$1" -type d -empty | while IFS= read -r dir; do
+        zenity --question --text="Do you want to remove the empty directory '$dir'?"
+        if [ $? -eq 0 ]; then
+            rmdir "$dir"
+            if [ $? -eq 0 ]; then
+                verbose "Removed empty directory: $dir"
+            else
+                verbose "Failed to remove empty directory: $dir"
+            fi
+        fi
+    done
+}
+
 # Ask for confirmation before renaming files and directories
 zenity --question --text="This script will scan the directory '$selected_dir' for filenames and directory names with special characters and rename them. Do you want to proceed?"
 if [ $? -eq 0 ]; then
@@ -107,7 +122,7 @@ for md5sum in "${!duplicate_files[@]}"; do
         dialog_text+="FALSE \"$file\" "
     done
     # Display the Zenity checklist dialog
-    choices=$(zenity --list --checklist --title="Select file(s) to delete (MD5sum: $md5sum)" --text="Select files to delete:" --column="Delete" --column="File" --separator=$'\n' $dialog_text)
+    choices=$(zenity --list --checklist --title="Select file(s) to delete (MD5sum: $md5sum)" --text="Select files to delete:" --column="Delete" --column="File" --separator="\n" $dialog_text)
     if [ -n "$choices" ]; then
         # Delete selected files
         for choice in $choices; do
@@ -131,6 +146,15 @@ if [ -n "$deleted_files" ]; then
     zenity --info --text="Duplicate files have been removed:\n$deleted_files\n\nFreed up storage: $freed_up_space MB"
 else
     zenity --info --text="No duplicate files found."
+fi
+
+# Prompt to remove empty directories
+zenity --question --text="Do you want to scan and remove empty directories?"
+if [ $? -eq 0 ]; then
+    remove_empty_directories "$selected_dir"
+    verbose "Empty directories removed."
+else
+    zenity --info --text="Empty directory removal skipped."
 fi
 
 verbose "Script execution completed."
