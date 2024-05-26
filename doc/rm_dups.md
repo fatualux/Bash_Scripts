@@ -12,7 +12,7 @@ Ensure that the following dependencies are installed:
 ## Usage
 1. Make the script executable and run it in a terminal:
 
-   ```basha
+   ```
    chmod +x rm_dups.sh && ./rm_dups.sh
    ```
 2. The script will prompt you to select a directory for duplicate file scanning.
