@@ -37,9 +37,7 @@ CONFIG_DIRS=(
 
 # Create an ARCH_BACKUP directory in the chosen destination folder
 ARCH_BACKUP_DIR="$DESTINATION_FOLDER/ARCH_BACKUP"
-if [[ ! -d "$ARCH_BACKUP_DIR" ]]; then
-    mkdir -p "$ARCH_BACKUP_DIR"
-fi
+mkdir -p "$ARCH_BACKUP_DIR"
 
 # Confirm before creating a tar archive of the files and directories
 confirm_backup "Create backup" "of config files and directories"
@@ -57,11 +55,11 @@ if [[ $? -eq 0 ]]; then
         ) | zenity --progress --title="Creating Config Archive" --text="Please wait..." --percentage=0 --auto-close --auto-kill
     )
 
-    zenity --info --text="Config archive created in $TAR_CONF"
+    echo "Config archive created in $TAR_CONF"
 
     # Inform the user after each file is backed up
     for item in "${CONFIG_FILES[@]}"; do
-        zenity --info --text="Backup of $item completed."
+        echo "Backup of $item completed."
     done
 else
     echo "Backup of config files and directories canceled."
@@ -82,7 +80,7 @@ for dir in "${CONFIG_DIRS[@]}"; do
             ) | zenity --progress --title="Creating Archive for $dir" --text="Please wait..." --percentage=0 --auto-close --auto-kill
         )
 
-        zenity --info --text="Backup of $dir completed."
+        echo "Backup of $dir completed."
     else
         echo "Backup of $dir canceled."
     fi
@@ -104,7 +102,7 @@ if [[ $? -eq 0 ]]; then
         ) | zenity --progress --title="Creating .virtualenv Archive" --text="Please wait..." --percentage=0 --auto-close --auto-kill
     )
 
-    zenity --info --text=".virtualenv archive created in $VENV_DIR"
+    echo ".virtualenv archive created in $VENV_DIR"
 else
     echo "Backup of .virtualenv directory canceled."
 fi
@@ -126,7 +124,7 @@ function create_pkg_list {
             fi
             echo "100"
         ) | zenity --progress --title="Creating $pkg_list_type Package List" --text="Please wait..." --percentage=0 --auto-close --auto-kill
-        zenity --info --text="$pkg_list_type package list created in $pkg_list_file"
+        echo "$pkg_list_type package list created in $pkg_list_file"
     else
         echo "Backup of $pkg_list_type package list canceled."
     fi
@@ -138,7 +136,7 @@ create_pkg_list "Repo" "$REPO_PKG_LIST"
 AUR_PKG_LIST="$ARCH_BACKUP_DIR/cust-pkglist.txt"
 create_pkg_list "AUR" "$AUR_PKG_LIST"
 
-zenity --info --text="Backup and package list creation completed."
+echo "Backup and package list creation completed."
 
 RESTORE_SCRIPT="$ARCH_BACKUP_DIR/restore.sh"
 
