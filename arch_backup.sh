@@ -132,23 +132,19 @@ function create_pkg_list {
     fi
 }
 
-# Confirm before listing packages from the official repo
 REPO_PKG_LIST="$ARCH_BACKUP_DIR/repo-pkglist.txt"
 create_pkg_list "Repo" "$REPO_PKG_LIST"
 
-# Confirm before listing foreign packages (custom e.g. AUR)
 AUR_PKG_LIST="$ARCH_BACKUP_DIR/cust-pkglist.txt"
 create_pkg_list "AUR" "$AUR_PKG_LIST"
 
 zenity --info --text="Backup and package list creation completed."
 
-# Create the restore script and make it executable
 RESTORE_SCRIPT="$ARCH_BACKUP_DIR/restore.sh"
 
 cat << 'EOF' > "$RESTORE_SCRIPT"
 #!/bin/bash
 
-# Update the system
 sudo pacman -Syu
 
 # Install packages from the official repositories
@@ -175,6 +171,19 @@ EOF
 
 chmod +x "$RESTORE_SCRIPT"
 
-# Notify the user about the restore script creation
 zenity --info --text="Restore script created in $ARCH_BACKUP_DIR"
 zenity --info --text="To restore the backup, run $ARCH_BACKUP_DIR/restore.sh"
+
+GROUPADD_SCRIPT="$ARCH_BACKUP_DIR/groupadd.sh"
+zenity --info --text="Creating $GROUPADD_SCRIPT script..."
+USER=$(whoami)
+echo $(groups $USER) > /tmp/groups.txt
+cat << EOF > "$GROUPADD_SCRIPT"
+#/bin/bash
+sudo usermod -aG $(cat /tmp/groups.txt) $USER
+EOF
+rm /tmp/groups.txt
+chmod +x "$GROUPADD_SCRIPT"
+
+zenity --info --text="Groupadd script created in $ARCH_BACKUP_DIR"
+zenity --info --text="To add user to groups, run $ARCH_BACKUP_DIR/groupadd.sh"
