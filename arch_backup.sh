@@ -64,7 +64,7 @@ if [[ $? -eq 0 ]]; then
         zenity --info --text="Backup of $item completed."
     done
 else
-    zenity --info --text="Backup of config files and directories skipped."
+    echo "Backup of config files and directories canceled."
 fi
 
 # Backup each directory with confirmation
@@ -84,7 +84,7 @@ for dir in "${CONFIG_DIRS[@]}"; do
 
         zenity --info --text="Backup of $dir completed."
     else
-        zenity --info --text="Backup of $dir skipped."
+        echo "Backup of $dir canceled."
     fi
 done
 
@@ -106,7 +106,7 @@ if [[ $? -eq 0 ]]; then
 
     zenity --info --text=".virtualenv archive created in $VENV_DIR"
 else
-    zenity --info --text="Backup of .virtualenv directory skipped."
+    echo "Backup of .virtualenv directory canceled."
 fi
 
 # Function to create package list
@@ -128,7 +128,7 @@ function create_pkg_list {
         ) | zenity --progress --title="Creating $pkg_list_type Package List" --text="Please wait..." --percentage=0 --auto-close --auto-kill
         zenity --info --text="$pkg_list_type package list created in $pkg_list_file"
     else
-        zenity --info --text="$pkg_list_type package list creation skipped."
+        echo "Backup of $pkg_list_type package list canceled."
     fi
 }
 
@@ -171,7 +171,7 @@ EOF
 
 chmod +x "$RESTORE_SCRIPT"
 
-zenity --info --text="Restore script created in $ARCH_BACKUP_DIR"
+echo "Restore script created in $ARCH_BACKUP_DIR"
 zenity --info --text="To restore the backup, run $ARCH_BACKUP_DIR/restore.sh"
 
 GROUPADD_SCRIPT="$ARCH_BACKUP_DIR/groupadd.sh"
@@ -185,5 +185,5 @@ EOF
 rm /tmp/groups.txt
 chmod +x "$GROUPADD_SCRIPT"
 
-zenity --info --text="Groupadd script created in $ARCH_BACKUP_DIR"
+echo "Groupadd script created in $ARCH_BACKUP_DIR"
 zenity --info --text="To add user to groups, run $ARCH_BACKUP_DIR/groupadd.sh"
