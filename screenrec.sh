@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# Set the output file name and format
 rec_date=$(date +%Y-%m-%d_%H-%M-%S)
 output_file="$rec_date.mp4"
 flag_file="recording.flag"
 pid_file="wf-recorder.pid"
 
-# Function to start the recording
 start_recording() {
     if [ -e "$flag_file" ]; then
         echo "Recording is already in progress. Press Ctrl+C to stop."
@@ -18,7 +16,6 @@ start_recording() {
     fi
 }
 
-# Function to stop the recording
 stop_recording() {
     if [ -e "$pid_file" ]; then
         echo "Stopping recording..."
