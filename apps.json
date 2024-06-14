@@ -40,11 +40,6 @@
     "command": "alacritty -e sh"
   },
   {
-    "name": "Tesseract OCR",
-    "path": "tesseract.sh",
-    "command": "alacritty -e sh"
-  },
-  {
     "name": "Translator",
     "path": "argos.sh",
     "command": "alacritty -e sh"
@@ -72,6 +67,21 @@
   {
     "name": "Prompt Generator",
     "path": "prompt-generator.sh",
+    "command": "alacritty -e sh"
+  },
+  {
+    "name": "Backup dotfiles",
+    "path": "dotfiles_backup.sh",
+    "command": "alacritty -e sh"
+  },
+  {
+    "name": "Cheshire Cat",
+    "path": "cheshire_cat.sh",
+    "command": "alacritty -e sh"
+  },
+  {
+    "name": "OCR",
+    "path": "surya.sh",
     "command": "alacritty -e sh"
   }
 ]
