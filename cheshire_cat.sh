@@ -14,24 +14,26 @@ check_dependencies() {
 start_containers() {
   echo "Changing directory to $WORKDIR"
   cd "$WORKDIR" || { echo "Failed to change directory to $WORKDIR"; exit 1; }
+  
   echo "Starting Docker containers"
-  docker compose up -d
-  if [ $? -eq 0 ]; then
+  if docker compose up -d; then
     echo "Docker containers started successfully."
   else
     echo "Failed to start Docker containers."
+    exit 1
   fi
 }
 
 stop_containers() {
   echo "Changing directory to $WORKDIR"
   cd "$WORKDIR" || { echo "Failed to change directory to $WORKDIR"; exit 1; }
+  
   echo "Stopping Docker containers"
-  docker compose down
-  if [ $? -eq 0 ]; then
+  if docker compose down; then
     echo "Docker containers stopped successfully."
   else
     echo "Failed to stop Docker containers."
+    exit 1
   fi
 }
 
@@ -43,6 +45,13 @@ prompt_action() {
   case $YAD_EXIT_CODE in
     0)
       start_containers
+      total_progress=200
+      for (( i=0; i<=total_progress; i++ )); do
+        sleep 0.1  # Simulate some work being done
+        ProgressBar "$i" "$total_progress"
+      done
+      echo "The Cat is now running!"
+      sleep 5
       ;;
     1)
       stop_containers
@@ -53,7 +62,27 @@ prompt_action() {
   esac
 }
 
+
+ProgressBar() {
+  local current="$1"
+  local total="$2"
+  local bar_size=40
+  local bar_char_done="#"
+  local bar_char_todo="-"
+  local bar_percentage_scale=2
+  local percent=$(bc <<< "scale=$bar_percentage_scale; 100 * $current / $total" )
+  local done=$(bc <<< "scale=0; $bar_size * $percent / 100" )
+  local todo=$(( bar_size - done ))
+  local done_sub_bar=$(printf "%${done}s" | tr " " "${bar_char_done}")
+  local todo_sub_bar=$(printf "%${todo}s" | tr " " "${bar_char_todo}")
+  echo -ne "\rProgress : [${done_sub_bar}${todo_sub_bar}] ${percent}%"
+  if [ "$total" -eq "$current" ]; then
+    echo -e "\nDONE"
+  fi
+}
+
 echo "Checking dependencies"
 check_dependencies
+
 echo "Prompting action"
 prompt_action
