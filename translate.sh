@@ -1,9 +1,9 @@
 #!/bin/bash
 # This script is based on translate-shell (https://github.com/soimort/translate-shell)
-# It depends on: bash yad
+# It depends on: bash zenity
 
 check_dependencies() {
-  dependencies=("yad" "trans" "wl-copy")
+  dependencies=("zenity" "trans" "wl-copy")
 
   for dep in "${dependencies[@]}"; do
     if ! command -v "$dep" &>/dev/null; then
@@ -15,7 +15,7 @@ check_dependencies() {
 
 ListLanguages() {
   options=("English" "Italian" "French" "Spanish" "German" "Japanese" "Russian" "Chinese")
-  LANG=$(yad --list --title="Select Language" --text="Select one option" --column="Language" "${options[@]}")
+  LANG=$(zenity --list --title="Select Language" --text="Select one option" --column="Language" "${options[@]}")
   case $LANG in
     "English") LANG="en";;
     "Italian") LANG="it";;
@@ -30,9 +30,9 @@ ListLanguages() {
 }
 
 translate_cmd() {
-  TERM=$(yad --entry --title="Enter Text" --text="Enter word or phrase:")
+  TERM=$(zenity --entry --title="Enter Text" --text="Enter word or phrase:")
   if [ -z "$TERM" ]; then
-    yad --info --text="Translation canceled."
+    zenity --info --text="Translation canceled."
     exit 1
   fi
 
@@ -40,7 +40,7 @@ translate_cmd() {
   echo ""
   echo -e '\e[40m\e[92m'
   echo "$output"
-  yad --info --text=".: $output :. has been copied to clipboard."
+  zenity --info --text=".: $output :. has been copied to clipboard."
   echo "$output" | wl-copy
   echo -e '\e[0m'
   echo ""
