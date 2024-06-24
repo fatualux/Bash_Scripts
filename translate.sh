@@ -2,6 +2,16 @@
 # This script is based on translate-shell (https://github.com/soimort/translate-shell)
 # It depends on: bash zenity
 
+CheckClipboardTool() {
+  if command -v wl-copy >/dev/null 2>&1; then
+    export CLIP_TOOL="wl-copy"
+    export PASTE_TOOL="wl-paste"
+  else
+    echo "Error: No clipboard tool (wl-copy) found!"
+    export CLIP_TOOL="NO"
+  fi
+}
+
 check_dependencies() {
   dependencies=("zenity" "trans" "wl-copy")
 
@@ -30,10 +40,14 @@ ListLanguages() {
 }
 
 translate_cmd() {
-  TERM=$(zenity --entry --title="Enter Text" --text="Enter word or phrase:")
-  if [ -z "$TERM" ]; then
-    zenity --info --text="Translation canceled."
-    exit 1
+  if [ CLIP_TOOL = "NO" ]; then
+    TERM=$(zenity --entry --title="Enter Text" --text="Enter word or phrase:")
+    if [ -z "$TERM" ]; then
+      zenity --info --text="Translation canceled."
+      exit 1
+    fi
+  else
+    TERM=$(wl-paste)
   fi
 
   output=$(trans -b -no-play -t "$LANG" "$TERM")
