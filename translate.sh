@@ -13,7 +13,7 @@ CheckClipboardTool() {
 }
 
 check_dependencies() {
-  dependencies=("zenity" "trans" "wl-copy")
+  dependencies=("zenity" "trans")
 
   for dep in "${dependencies[@]}"; do
     if ! command -v "$dep" &>/dev/null; then
@@ -40,29 +40,42 @@ ListLanguages() {
 }
 
 translate_cmd() {
-  if [ CLIP_TOOL = "NO" ]; then
+  if [ "$CLIP_TOOL" = "NO" ]; then
     TERM=$(zenity --entry --title="Enter Text" --text="Enter word or phrase:")
-    if [ -z "$TERM" ]; then
-      zenity --info --text="Translation canceled."
-      exit 1
-    fi
   else
     TERM=$(wl-paste)
+    if [ -z "$TERM" ]; then
+      TERM=$(zenity --entry --title="Enter Text" --text="Enter word or phrase:")
+    else
+      TERM=$(zenity --entry --title="Enter Text" --text="Edit or confirm text to be translated:" --entry-text="$TERM")
+    fi
+  fi
+
+  if [ -z "$TERM" ]; then
+    zenity --info --text="Translation canceled."
+    exit 1
   fi
 
   output=$(trans -b -no-play -t "$LANG" "$TERM")
   echo ""
   echo -e '\e[40m\e[92m'
   echo "$output"
-  zenity --info --text=".: $output :. has been copied to clipboard."
-  echo "$output" | wl-copy
   echo -e '\e[0m'
   echo ""
   echo "Done!"
+
+  if [ "$CLIP_TOOL" != "NO" ]; then
+    echo "$output" | wl-copy
+    zenity --info --text=".: $output :. has been copied to clipboard."
+  else
+    zenity --info --text=".: $output :."
+  fi
+
   read -p "Press Enter to exit..."
   exit 0
 }
 
 check_dependencies
+CheckClipboardTool
 ListLanguages
 translate_cmd
