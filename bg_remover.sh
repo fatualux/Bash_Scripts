@@ -49,14 +49,13 @@ FrameRate() {
 }
 
 process_video() {
-  local extension="$1"
   IFS=$'\n'
   for FILE in $(cat "$FILES_LIST"); do
     mkdir -p "$OUTPUT_DIR"  # Create the output directory if it doesn't exist
-    OUTPUT_FILE="$OUTPUT_DIR/BGR_$(date +"%S").$extension"
-    backgroundremover -i "$FILE" -m "$R_TYPE" -t"$extension" -fr "$R_FRAME" -o "$OUTPUT_FILE"
-    rm "$FILES_LIST"
+    OUTPUT_FILE="$OUTPUT_DIR/BGR_$(date +"%Y%m%d_%H%M%S").mov"
+    backgroundremover -i "$FILE" -m "$R_TYPE" -tv -fr "$R_FRAME" -o "$OUTPUT_FILE"
   done
+  rm "$FILES_LIST"
   echo "Done!"
 }
 
@@ -64,10 +63,10 @@ process_image() {
   IFS=$'\n'
   for FILE in $(cat "$FILES_LIST"); do
     mkdir -p "$OUTPUT_DIR"  # Create the output directory if it doesn't exist
-    OUTPUT_FILE="$OUTPUT_DIR/BGR_$(date +"%S").png"
+    OUTPUT_FILE="$OUTPUT_DIR/BGR_$(date +"%Y%m%d_%H%M%S").png"
     backgroundremover -i "$FILE" -m "$R_TYPE" -o "$OUTPUT_FILE"
-    rm "$FILES_LIST"
   done
+  rm "$FILES_LIST"
   echo "Done!"
 }
 
@@ -77,7 +76,7 @@ MediaType() {
     "Video")
       RemovalType
       FrameRate
-      process_video "mov"
+      process_video
       ;;
     "Image")
       RemovalType
