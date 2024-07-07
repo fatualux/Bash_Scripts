@@ -55,7 +55,7 @@ process_video() {
     mkdir -p "$OUTPUT_DIR"  # Create the output directory if it doesn't exist
     OUTPUT_FILE="$OUTPUT_DIR/BGR_$(date +"%S").$extension"
     backgroundremover -i "$FILE" -m "$R_TYPE" -t"$extension" -fr "$R_FRAME" -o "$OUTPUT_FILE"
-    rm "$FILE"
+    rm "$FILES_LIST"
   done
   echo "Done!"
 }
@@ -66,7 +66,7 @@ process_image() {
     mkdir -p "$OUTPUT_DIR"  # Create the output directory if it doesn't exist
     OUTPUT_FILE="$OUTPUT_DIR/BGR_$(date +"%S").png"
     backgroundremover -i "$FILE" -m "$R_TYPE" -o "$OUTPUT_FILE"
-    rm "$FILE"
+    rm "$FILES_LIST"
   done
   echo "Done!"
 }
