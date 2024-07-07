@@ -271,6 +271,7 @@ get_framerate() {
     FILE_NAME_WITH_BACKSLASH=$(echo "$FILE_NAME" | sed 's/ /\\ /g')
     echo ""
     echo "The original framerate of $FILE_NAME_WITH_BACKSLASH is $FILE_FPS fps"
+    zenity --info --text "The original framerate of $FILE_NAME_WITH_BACKSLASH is $FILE_FPS fps"
     echo ""
   done
   rm $FILES_LIST
