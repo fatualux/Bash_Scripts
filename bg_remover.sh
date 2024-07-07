@@ -1,8 +1,8 @@
 #!/bin/bash
 # This script is based on backgroundremover (https://github.com/nadermx/backgroundremover)#
 
-WORKDIR="$HOME/.virtualenv/background-remover"
-cd $WORKDIR && git pull
+WORKDIR="$HOME/.virtualenv/background_remover"
+OUTPUT_DIR="$HOME/BG_REMOVED/"
 source $WORKDIR/bin/activate && pip install --upgrade pip
 pip install -r $WORKDIR/requirements.txt && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.10/site-packages/
 
@@ -52,10 +52,10 @@ process_video() {
   local extension="$1"
   IFS=$'\n'
   for FILE in $(cat "$FILES_LIST"); do
-    OUTPUT_DIR="$HOME/Media/"
     mkdir -p "$OUTPUT_DIR"  # Create the output directory if it doesn't exist
     OUTPUT_FILE="$OUTPUT_DIR/BGR_$(date +"%S").$extension"
     backgroundremover -i "$FILE" -m "$R_TYPE" -t"$extension" -fr "$R_FRAME" -o "$OUTPUT_FILE"
+    rm "$FILE"
   done
   echo "Done!"
 }
@@ -63,10 +63,10 @@ process_video() {
 process_image() {
   IFS=$'\n'
   for FILE in $(cat "$FILES_LIST"); do
-    OUTPUT_DIR="$HOME/Media/"
     mkdir -p "$OUTPUT_DIR"  # Create the output directory if it doesn't exist
     OUTPUT_FILE="$OUTPUT_DIR/BGR_$(date +"%S").png"
     backgroundremover -i "$FILE" -m "$R_TYPE" -o "$OUTPUT_FILE"
+    rm "$FILE"
   done
   echo "Done!"
 }
