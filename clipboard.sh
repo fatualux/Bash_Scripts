@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TITLE_WORD_COUNT=3
-CLIPBOARD_FILE="$HOME/.clipboard.txt"
+CLIPBOARD_DIR="$HOME/.clipboard"
 MAX_FILE_SIZE=$((10 * 1024 * 1024))  # 10 MB
 ALLOWED_EXTENSIONS=("txt" "md")
 
@@ -21,14 +21,22 @@ show_error() {
 show_help() {
     local message="Usage: $0 [OPTION]\n\n"
     message+="Options:\n"
-    message+="  --copy         Copy selected files to clipboard (only allowed extensions)\n"
-    message+="  --force-copy   Copy selected files to clipboard (ignoring extensions)\n"
-    message+="  --recall       Recall clips from clipboard\n"
-    message+="  --clear N      Clear the last N lines from clipboard\n"
-    message+="  --purge        Delete all lines from clipboard\n"
-    message+="  --help         Display this help message\n\n"
-    message+="Clips are stored in $CLIPBOARD_FILE"
-    zenity --info --text="$message" --title="Help"
+    message+="  --copy           Copy selected files to clipboard (only allowed extensions)\n"
+    message+="  --force-copy     Copy selected files to clipboard (ignoring extensions)\n"
+    message+="  --recall         Recall clips from clipboard\n"
+    message+="  --clear N        Clear selected clips from clipboard\n"
+    message+="  --purge          Delete all lines from clipboard\n"
+    message+="  --new-clip       Add a new clip from input dialog\n"
+    message+="  --help           Display this help message\n\n"
+    message+="Clips are stored in $CLIPBOARD_DIR"
+
+    if [[ -t 1 ]]; then
+        # If standard output is a terminal, show help in the shell
+        echo -e "$message"
+    else
+        # Otherwise, use Zenity
+        zenity --info --text="$message" --title="Help"
+    fi
 }
 
 if ! check_command zenity; then
@@ -67,6 +75,8 @@ copy_to_clipboard() {
 
     IFS='|' read -ra file_array <<< "$files"
 
+    mkdir -p "$CLIPBOARD_DIR"
+
     for file in "${file_array[@]}"; do
         if [[ "$force" != "force" ]] && ! validate_extension "$file"; then
             show_error "Invalid file extension for file: $file"
@@ -86,75 +96,75 @@ copy_to_clipboard() {
         fi
 
         local date_time
-        date_time=$(date '+%Y-%m-%d %H:%M:%S')
+        date_time=$(date '+%Y-%m-%d_%H-%M-%S')
+        local first_word
+        first_word=$(basename "$file" | awk '{print $1}')
+
         local content
         content=$(cat "$file")
 
-        echo "$content" | $CLIP_CMD
+        local clip_file
+        clip_file="$CLIPBOARD_DIR/${date_time}-${first_word}.txt"
         {
-            echo "[$date_time]"
             echo "$content"
-            echo "---END OF CLIP---"
-        } >> "$CLIPBOARD_FILE"
+        } > "$clip_file"
     done
 }
 
 recall_from_clipboard() {
-    if [[ ! -f "$CLIPBOARD_FILE" ]]; then
-        show_error "Clipboard file not found."
-        exit 1
-    fi
-
-    local lines
-    lines=$(grep -n '^\[.*\]' "$CLIPBOARD_FILE" | awk -v count="$TITLE_WORD_COUNT" '{for (i=2; i<=count+1; i++) printf $i " "; print "..."}')
-
-    local selection
-    selection=$(echo "$lines" | zenity --list --column="Clips" --title="Select Clip")
-
-    if [[ -z "$selection" ]]; then
-        show_error "No clip selected."
-        exit 1
-    fi
-
-    local line_number
-    line_number=$(echo "$selection" | cut -d: -f1)
-
-    local content
-    content=$(sed -n "${line_number},/---END OF CLIP---/p" "$CLIPBOARD_FILE" | sed '/---END OF CLIP---/d')
-    echo "$content" | $CLIP_CMD
+  local files
+  files=$(zenity --title="Select clip to Recall" --file-selection --multiple --filename=$CLIPBOARD_DIR/)
+  if [[ -z "$files" ]]; then
+    show_error "No files selected."
+    exit 1
+  fi
+  cat $files | $CLIP_CMD
 }
 
-clear_lines() {
-    local num_lines="$1"
-    if ! [[ "$num_lines" =~ ^[0-9]+$ ]]; then
-        show_error "Invalid number of lines: $num_lines"
-        exit 1
-    fi
-
-    if [[ ! -f "$CLIPBOARD_FILE" ]]; then
-        show_error "Clipboard file not found."
-        exit 1
-    fi
-
-    local total_lines
-    total_lines=$(grep -c '^\[.*\]' "$CLIPBOARD_FILE")
-
-    if (( num_lines > total_lines )); then
-        show_error "Number of lines to clear exceeds total lines in clipboard file."
-        exit 1
-    fi
-
-    sed -i "1,${num_lines}d" "$CLIPBOARD_FILE"
+clear_clips() {
+  local files
+  files=$(zenity --title="Select clip to clear" --file-selection --multiple --filename=$CLIPBOARD_DIR/)
+  if [[ -z "$files" ]]; then
+    show_error "No files selected."
+    exit 1
+  fi
+  rm $files
 }
 
 purge_clipboard() {
-    if [[ -f "$CLIPBOARD_FILE" ]]; then
-        > "$CLIPBOARD_FILE"
+    if [[ -d "$CLIPBOARD_DIR" ]]; then
+        # Remove all files in the clipboard directory
+        rm -f "$CLIPBOARD_DIR"/*.txt
+    else
+        show_error "Clipboard directory not found."
+        exit 1
     fi
 }
 
+new_clip() {
+    local new_content
+    new_content=$(zenity --entry --title "New Clip" --text "Enter the content for the new clip:")
+    if [[ -z "$new_content" ]]; then
+        show_error "No content entered for new clip."
+        exit 1
+    fi
+
+    mkdir -p "$CLIPBOARD_DIR"
+
+    local date_time
+    date_time=$(date '+%Y-%m-%d_%H-%M-%S')
+    local first_word
+    first_word=$(echo "$new_content" | awk '{print $1}')
+
+    local clip_file
+    clip_file="$CLIPBOARD_DIR/${date_time}-${first_word}.txt"
+    {
+        echo "$new_content"
+    } > "$clip_file"
+}
+
 if [[ $# -eq 0 ]]; then
-    action=$(zenity --list --radiolist --column "Select" --column "Action" TRUE "copy" FALSE "force-copy" FALSE "recall" FALSE "clear" FALSE "purge" FALSE "help" --title "Clipboard Manager")
+    action=$(zenity --list --radiolist --column "Select" --column "Action" TRUE "copy" FALSE "force-copy" FALSE "recall" FALSE "clear" FALSE "purge" FALSE "new-clip" FALSE "help" --title "Clipboard Manager")
     case "$action" in
         "copy")
             copy_to_clipboard "normal"
@@ -166,11 +176,13 @@ if [[ $# -eq 0 ]]; then
             recall_from_clipboard
             ;;
         "clear")
-            num_lines=$(zenity --entry --title "Clear Clipboard" --text "Enter the number of clips to clear:")
-            clear_lines "$num_lines"
+            clear_clips
             ;;
         "purge")
             purge_clipboard
+            ;;
+        "new-clip")
+            new_clip
             ;;
         "help")
             show_help
@@ -182,22 +194,25 @@ if [[ $# -eq 0 ]]; then
     esac
 else
     case "$1" in
-        --copy)
+        --copy | -c)
             copy_to_clipboard "normal"
             ;;
-        --force-copy)
+        --force-copy | -fc)
             copy_to_clipboard "force"
             ;;
-        --recall)
+        --recall | -r)
             recall_from_clipboard
             ;;
-        --clear)
-            clear_lines "$2"
+        --clear | -cl)
+            clear_clips
             ;;
-        --purge)
+        --purge | -d)
             purge_clipboard
             ;;
-        --help)
+        --new-clip | -nc)
+            new_clip
+            ;;
+        --help | -h)
             show_help
             ;;
         *)
@@ -206,3 +221,4 @@ else
             ;;
     esac
 fi
+
