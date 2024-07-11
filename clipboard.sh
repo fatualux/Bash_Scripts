@@ -19,17 +19,16 @@ show_error() {
 }
 
 show_help() {
-    echo "Usage: $0 [OPTION]"
-    echo ""
-    echo "Options:"
-    echo "  --copy         Copy selected files to clipboard (only allowed extensions)"
-    echo "  --force-copy   Copy selected files to clipboard (ignoring extensions)"
-    echo "  --recall       Recall clips from clipboard"
-    echo "  --clear N      Clear the last N lines from clipboard"
-    echo "  --purge        Delete all lines from clipboard"
-    echo "  --help         Display this help message"
-    echo ""
-    echo "Clips are stored in $CLIPBOARD_FILE"
+    local message="Usage: $0 [OPTION]\n\n"
+    message+="Options:\n"
+    message+="  --copy         Copy selected files to clipboard (only allowed extensions)\n"
+    message+="  --force-copy   Copy selected files to clipboard (ignoring extensions)\n"
+    message+="  --recall       Recall clips from clipboard\n"
+    message+="  --clear N      Clear the last N lines from clipboard\n"
+    message+="  --purge        Delete all lines from clipboard\n"
+    message+="  --help         Display this help message\n\n"
+    message+="Clips are stored in $CLIPBOARD_FILE"
+    zenity --info --text="$message" --title="Help"
 }
 
 if ! check_command zenity; then
@@ -92,7 +91,11 @@ copy_to_clipboard() {
         content=$(cat "$file")
 
         echo "$content" | $CLIP_CMD
-        echo "[$date_time] $content" >> "$CLIPBOARD_FILE"
+        {
+            echo "[$date_time]"
+            echo "$content"
+            echo "---END OF CLIP---"
+        } >> "$CLIPBOARD_FILE"
     done
 }
 
@@ -103,10 +106,10 @@ recall_from_clipboard() {
     fi
 
     local lines
-    lines=$(awk -v count="$TITLE_WORD_COUNT" '{for (i=1; i<=count; i++) printf $i " "; print "..."}' "$CLIPBOARD_FILE" | awk '{print NR ": " $0}')
+    lines=$(grep -n '^\[.*\]' "$CLIPBOARD_FILE" | awk -v count="$TITLE_WORD_COUNT" '{for (i=2; i<=count+1; i++) printf $i " "; print "..."}')
 
     local selection
-    selection=$(echo "$lines" | zenity --list --column="Lines" --title="Select Clip")
+    selection=$(echo "$lines" | zenity --list --column="Clips" --title="Select Clip")
 
     if [[ -z "$selection" ]]; then
         show_error "No clip selected."
@@ -117,7 +120,7 @@ recall_from_clipboard() {
     line_number=$(echo "$selection" | cut -d: -f1)
 
     local content
-    content=$(sed "${line_number}q;d" "$CLIPBOARD_FILE")
+    content=$(sed -n "${line_number},/---END OF CLIP---/p" "$CLIPBOARD_FILE" | sed '/---END OF CLIP---/d')
     echo "$content" | $CLIP_CMD
 }
 
@@ -134,14 +137,14 @@ clear_lines() {
     fi
 
     local total_lines
-    total_lines=$(wc -l < "$CLIPBOARD_FILE")
+    total_lines=$(grep -c '^\[.*\]' "$CLIPBOARD_FILE")
 
     if (( num_lines > total_lines )); then
         show_error "Number of lines to clear exceeds total lines in clipboard file."
         exit 1
     fi
 
-    head -n -"$num_lines" "$CLIPBOARD_FILE" > "$CLIPBOARD_FILE.tmp" && mv "$CLIPBOARD_FILE.tmp" "$CLIPBOARD_FILE"
+    sed -i "1,${num_lines}d" "$CLIPBOARD_FILE"
 }
 
 purge_clipboard() {
@@ -150,27 +153,56 @@ purge_clipboard() {
     fi
 }
 
-case "$1" in
-    --copy)
-        copy_to_clipboard "normal"
-        ;;
-    --force-copy)
-        copy_to_clipboard "force"
-        ;;
-    --recall)
-        recall_from_clipboard
-        ;;
-    --clear)
-        clear_lines "$2"
-        ;;
-    --purge)
-        purge_clipboard
-        ;;
-    --help)
-        show_help
-        ;;
-    *)
-        show_error "Invalid option. Use --help to see available options."
-        exit 1
-        ;;
-esac
+if [[ $# -eq 0 ]]; then
+    action=$(zenity --list --radiolist --column "Select" --column "Action" TRUE "copy" FALSE "force-copy" FALSE "recall" FALSE "clear" FALSE "purge" FALSE "help" --title "Clipboard Manager")
+    case "$action" in
+        "copy")
+            copy_to_clipboard "normal"
+            ;;
+        "force-copy")
+            copy_to_clipboard "force"
+            ;;
+        "recall")
+            recall_from_clipboard
+            ;;
+        "clear")
+            num_lines=$(zenity --entry --title "Clear Clipboard" --text "Enter the number of clips to clear:")
+            clear_lines "$num_lines"
+            ;;
+        "purge")
+            purge_clipboard
+            ;;
+        "help")
+            show_help
+            ;;
+        *)
+            show_error "Invalid option."
+            exit 1
+            ;;
+    esac
+else
+    case "$1" in
+        --copy)
+            copy_to_clipboard "normal"
+            ;;
+        --force-copy)
+            copy_to_clipboard "force"
+            ;;
+        --recall)
+            recall_from_clipboard
+            ;;
+        --clear)
+            clear_lines "$2"
+            ;;
+        --purge)
+            purge_clipboard
+            ;;
+        --help)
+            show_help
+            ;;
+        *)
+            show_error "Invalid option. Use --help to see available options."
+            exit 1
+            ;;
+    esac
+fi
