@@ -1,17 +1,14 @@
 #!/bin/bash
 
-# Configuration
 TITLE_WORD_COUNT=3
 CLIPBOARD_FILE="$HOME/.clipboard.txt"
 MAX_FILE_SIZE=$((10 * 1024 * 1024))  # 10 MB
 ALLOWED_EXTENSIONS=("txt" "md")
 
-# Function to check for required commands
 check_command() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Function to display error messages
 show_error() {
     local message="$1"
     if check_command zenity; then
@@ -21,7 +18,6 @@ show_error() {
     fi
 }
 
-# Function to display help message
 show_help() {
     echo "Usage: $0 [OPTION]"
     echo ""
@@ -36,13 +32,11 @@ show_help() {
     echo "Clips are stored in $CLIPBOARD_FILE"
 }
 
-# Check if zenity is installed
 if ! check_command zenity; then
     show_error "Zenity is not installed. Please install zenity and try again."
     exit 1
 fi
 
-# Check if xclip or wl-clipboard is installed
 if check_command xclip; then
     CLIP_CMD="xclip -selection clipboard"
 elif check_command wl-copy; then
@@ -52,7 +46,6 @@ else
     exit 1
 fi
 
-# Function to validate file extension
 validate_extension() {
     local file="$1"
     local ext="${file##*.}"
@@ -64,7 +57,6 @@ validate_extension() {
     return 1
 }
 
-# Function to handle the --copy operation
 copy_to_clipboard() {
     local force="$1"
     local files
@@ -104,7 +96,6 @@ copy_to_clipboard() {
     done
 }
 
-# Function to handle the --recall operation
 recall_from_clipboard() {
     if [[ ! -f "$CLIPBOARD_FILE" ]]; then
         show_error "Clipboard file not found."
@@ -130,7 +121,6 @@ recall_from_clipboard() {
     echo "$content" | $CLIP_CMD
 }
 
-# Function to clear the last N lines from the clipboard file
 clear_lines() {
     local num_lines="$1"
     if ! [[ "$num_lines" =~ ^[0-9]+$ ]]; then
@@ -154,14 +144,12 @@ clear_lines() {
     head -n -"$num_lines" "$CLIPBOARD_FILE" > "$CLIPBOARD_FILE.tmp" && mv "$CLIPBOARD_FILE.tmp" "$CLIPBOARD_FILE"
 }
 
-# Function to purge all lines from the clipboard file
 purge_clipboard() {
     if [[ -f "$CLIPBOARD_FILE" ]]; then
         > "$CLIPBOARD_FILE"
     fi
 }
 
-# Main logic
 case "$1" in
     --copy)
         copy_to_clipboard "normal"
