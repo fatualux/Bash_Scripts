@@ -24,7 +24,7 @@ show_help() {
     message+="  --copy           Copy selected files to clipboard (only allowed extensions)\n"
     message+="  --force-copy     Copy selected files to clipboard (ignoring extensions)\n"
     message+="  --recall         Recall clips from clipboard\n"
-    message+="  --clear N        Clear selected clips from clipboard\n"
+    message+="  --clear          Clear selected clips from clipboard\n"
     message+="  --purge          Delete all lines from clipboard\n"
     message+="  --new-clip       Add a new clip from input dialog\n"
     message+="  --help           Display this help message\n\n"
