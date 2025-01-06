@@ -25,11 +25,6 @@
     "command": "alacritty -e sh"
   },
   {
-    "name": "Remove Duplicates",
-    "path": "rm_dups.sh",
-    "command": "alacritty -e sh"
-  },
-  {
     "name": "Virtual Env Activate",
     "path": "vactivate.sh",
     "command": "alacritty -e sh"
@@ -46,7 +41,7 @@
   },
   {
     "name": "TTS",
-    "path": "tts.sh",
+    "path": "piper-tts.sh",
     "command": "alacritty -e sh"
   },
   {
@@ -81,7 +76,7 @@
   },
   {
     "name": "OCR",
-    "path": "surya.sh",
+    "path": "tesseract.sh",
     "command": "alacritty -e sh"
   }
 ]
