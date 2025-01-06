@@ -35,13 +35,8 @@
     "command": "alacritty -e sh"
   },
   {
-    "name": "Translator",
-    "path": "argos.sh",
-    "command": "alacritty -e sh"
-  },
-  {
     "name": "TTS",
-    "path": "piper-tts.sh",
+    "path": "piper.sh",
     "command": "alacritty -e sh"
   },
   {

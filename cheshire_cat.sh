@@ -63,6 +63,13 @@ prompt_action() {
 }
 
 
+print_messages() {
+  echo "Connect to the Cat's IP address and see the messages!"
+  echo ""
+  echo "http://localhost:1865/admin"
+}
+
+
 ProgressBar() {
   local current="$1"
   local total="$2"
@@ -86,3 +93,6 @@ check_dependencies
 
 echo "Prompting action"
 prompt_action
+
+print_messages
+

@@ -30,13 +30,13 @@ trap cleanup EXIT
 
 check_dependencies
 
-WEBUI_DIR="$HOME/Documents/Github/ollama-webui/backend/"
+WORKDIR="$HOME/Documents/Github/ollama-webui/backend/"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.12/site-packages/
 PORT="${1-8000}"
 
 webui() {
-  cd "$WEBUI_DIR" || exit
-  source bin/activate && pip install --upgrade pip || exit
-  pip install -r requirements.txt -U
+  cd "$WORKDIR" || exit
+  source bin/activate
   ollama serve | bash start.sh
 }
 

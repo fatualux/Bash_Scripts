@@ -3,8 +3,8 @@
 
 WORKDIR="$HOME/.virtualenv/background_remover"
 OUTPUT_DIR="$HOME/BG_REMOVED/"
-source $WORKDIR/bin/activate && pip install --upgrade pip
-pip install -r $WORKDIR/requirements.txt && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.10/site-packages/
+source $WORKDIR/.venv/bin/activate && pip install --upgrade pip
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.10/site-packages/
 
 SelectFile() {
   files=$(zenity --title "Which media file do you want to process?" --file-selection --multiple --filename="$HOME/")

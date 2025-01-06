@@ -6,7 +6,7 @@ WORKDIR=$HOME/.virtualenv/whisper/.venv
 cd $WORKDIR
 source $WORKDIR/bin/activate && pip install --upgrade pip
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.12/site-packages/nvidia/cudnn/lib/:$WORKDIR/lib/python3.12/site-packages/nvidia/cublas/lib/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.10/site-packages/nvidia/cudnn/lib/:$WORKDIR/lib/python3.10/site-packages/nvidia/cublas/lib/
 
 SelectFile() {
   FILES_LIST=files.txt
