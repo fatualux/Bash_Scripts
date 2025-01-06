@@ -1,11 +1,10 @@
 #!/bin/sh
 #This script is based on faster-whisper (https://github.com/guillaumekln/faster-whisper)
 
-WORKDIR=$HOME/.virtualenv/whisper
+WORKDIR=$HOME/.virtualenv/whisper/.venv
 
 cd $WORKDIR
 source $WORKDIR/bin/activate && pip install --upgrade pip
-pip install -r $WORKDIR/requirements.txt
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$WORKDIR/lib/python3.12/site-packages/nvidia/cudnn/lib/:$WORKDIR/lib/python3.12/site-packages/nvidia/cublas/lib/
 
@@ -156,7 +155,6 @@ ListLanguages() {
           Command_Auto
           exit
         ;;
-        
     esac
 }
 
