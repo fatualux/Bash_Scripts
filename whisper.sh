@@ -1,5 +1,4 @@
 #!/bin/sh
-#This script is based on faster-whisper (https://github.com/guillaumekln/faster-whisper)
 
 WORKDIR=$HOME/.virtualenv/whisper/.venv
 
@@ -98,7 +97,7 @@ Command_Lang() {
   IFS=$'\n'
   for FILE in $(cat $FILES_LIST);
   do
-    whisper-ctranslate2 "$FILE" --language "$LANG" --model "$MODEL" --model_dir $WORKDIR/models --device cuda --output_format "$FORMAT" --output_dir "$HOME/Transcripts/" --print_colors "$COLORS" --word_timestamps "$HIGHLIGHT" --highlight_words "$HIGHLIGHT"
+    whisper-ctranslate2 "$FILE" --language "$LANG" --model "$MODEL" --model_dir "$WORKDIR/models" --device "cuda" --output_format "$FORMAT" --output_dir "$HOME/Transcripts/" --print_colors "$COLORS" --word_timestamps "$HIGHLIGHT" --highlight_words "$HIGHLIGHT"
   done
   rm $FILES_LIST
   echo "Done!"
@@ -108,7 +107,7 @@ Command_Auto() {
   IFS=$'\n'
   for FILE in $(cat $FILES_LIST);
   do
-    whisper-ctranslate2 "$FILE" --model "$MODEL" --model_dir $WORKDIR/models --device cuda --output_format "$FORMAT" --output_dir "$HOME/Transcripts/" --print_colors "$COLORS" --word_timestamps "$HIGHLIGHT" --highlight_words "$HIGHLIGHT"
+    whisper-ctranslate2 "$FILE" --model "$MODEL" --model_dir "$WORKDIR/models" --device "cuda" --output_format "$FORMAT" --output_dir "$HOME/Transcripts/" --print_colors "$COLORS" --word_timestamps "$HIGHLIGHT" --highlight_words "$HIGHLIGHT"
   done
   rm $FILES_LIST
   echo "Done!"
@@ -122,38 +121,47 @@ ListLanguages() {
     case $lang in
       "English")
         export LANG="en"
+        return
         ;;
       "French")
         export LANG="fr"
+        return
         ;;
       "Spanish")
         export LANG="es"
+        return
         ;;
       "German")
         export LANG="de"
+        return
         ;;
       "Italian")
         export LANG="it"
+        return
         ;;
       "Japanese")
         export LANG="ja"
+        return
         ;;
       "Hindi")
         export LANG="hi"
+        return
         ;;
       "Russian")
         export LANG="ru"
+        return
         ;;
       "Chinese")
         export LANG="zh"
+        return
         ;;
-        "Autodetect")
-          SelectFile
-          ListModels
-          OutputFormat
-          CustomOptions
-          Command_Auto
-          exit
+      "Autodetect")
+        SelectFile
+        ListModels
+        OutputFormat
+        CustomOptions
+        Command_Auto
+        exit
         ;;
     esac
 }
